@@ -1,6 +1,6 @@
 namespace backend;
 
-class GroupService
+public class GroupService
 {
     //Tar int title och user
     private ApplicationDbContext context;
@@ -12,48 +12,81 @@ class GroupService
 
     public Group CreateGroup(string title)
     {
+
         if (string.IsNullOrEmpty(title))
         {
-            throw new ArgumentException("User not found");
+            throw new ArgumentNullException("Group not found");
         }
+
         Group newGroup = new Group(title, new List<string>());
         context.Groups.Add(newGroup);
         context.SaveChanges();
         return newGroup;
     }
 
-    //Addmembers
-    /*     public Group AddMembers(Guid groupId, Guid userId)
+    public Group RemoveGroup(Guid Id)
+    {
+        Group? group = context.Groups.Find(Id);
+        
+        if (group == null)
         {
-            User? user = context.Users.Find(userId);
-            Group? group = context.Groups.Find(groupId);
-    
-            if (group != null && user != null)
-            {
-                group.addUser(user);
-                context.Groups.Update(group);
-                context.SaveChanges();
-                return group;
-            }
-    
-            throw new ArgumentException("Eiter User or Group is null or empty");
-        } */
+            throw new ArgumentNullException("Group not found");
+        }
 
-    //removeMemers
-    /*     public Group RemoveMembers(Guid groupId, Guid userId)
-        {
-            User? user = context.Users.Find(userId);
-            Group? group = context.Groups.Find(groupId);
-            if (group != null && user != null)
-            {
-                group.RemoveUser(user);
-                context.Groups.Update(group);
-                context.SaveChanges();
-                return group;
-            }
+        context.Groups.Remove(group);
+        context.SaveChanges();
+        return group;
+    }
     
-            throw new ArgumentException("Eiter User or Group is null or empty");
-        } */
+    public Group AddMembers(Guid groupId, string user)
+    {
+        
+        Group? group = context.Groups.Find(groupId);
+        if(group != null && user != null)
+        {
+            group.addUser(user);
+            context.Groups.Update(group);
+            context.SaveChanges();
+            return group;
+        }
+
+         throw new ArgumentNullException("Either User or Group is null or empty");
+    }
+
+     //Addmembers
+        // public Group AddMembers(Guid groupId, Guid userId)
+        // {
+            // User? user = context.Users.Find(userId);
+            // Group? group = context.Groups.Find(groupId);
+    
+            // if (group != null && user != null)
+            // { 
+
+
+        //         group.addUser(user);
+        //         context.Groups.Update(group);
+        //         context.SaveChanges();
+        //         return group;
+        //    }
+    
+        //     throw new ArgumentException("Either User or Group is null or empty");
+        // } 
+
+    //removeMembers
+        // public Group RemoveMembers(Guid groupId, Guid userId)
+        // {
+        //     User? user = context.Users.Find(userId);
+        //     Group? group = context.Groups.Find(groupId);
+        //     if (group != null && user != null)
+        //     {
+        //         group.RemoveUser(user);
+        //         context.Groups.Update(group);
+        //         context.SaveChanges();
+        //         return group;
+        //     }
+    
+        //     throw new ArgumentException("Either User or Group is null or empty");
+        // } 
 
     //remove group
 }

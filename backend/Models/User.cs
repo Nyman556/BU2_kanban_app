@@ -10,4 +10,5 @@ public class User : IdentityUser
     {
         this.CreationDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
     }
+    
 }

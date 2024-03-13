@@ -27,6 +27,8 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddApiEndpoints();
 
+        builder.Services.AddScoped<GroupService>();
+
         builder.Services.AddControllers();
         var app = builder.Build();
 

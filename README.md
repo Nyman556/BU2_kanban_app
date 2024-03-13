@@ -15,3 +15,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 # IdentityCore
 
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+# Migrations
+för att uppdatera databasen
+dotnet ef database update
