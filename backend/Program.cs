@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,24 @@ public class Program
                 "Host=localhost;Database=kanban;Username=postgres;Password=NewPassword"
             );
         });
+
+        builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+
+        builder
+            .Services.AddIdentityCore<User>(options =>
+            {
+                // lägg till alternativ för Användaren här framöver: t.ex email confirm etc
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddApiEndpoints();
+
         builder.Services.AddControllers();
         var app = builder.Build();
 
         app.UseHttpsRedirection();
+        app.MapIdentityApi<User>();
         app.MapControllers();
+        app.UseAuthentication();
 
         app.Run();
     }
