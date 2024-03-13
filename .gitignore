@@ -1,0 +1,15 @@
+/backend/bin/
+backend/obj/
+backend/packages/
+backend/*.nupkg
+backend/*.user
+backend/*.suo
+backend/*.userprefs
+backend/.vs/
+backend/*.sln.ide
+backend/*.csproj.user
+backend/*.tmp
+backend/*.log
+backend/*.pdb
+backend/appsettings.json
+backend/*.config
