@@ -37,6 +37,17 @@ public class GroupService
         context.SaveChanges();
         return group;
     }
+
+    public List<Group> GetAllGroups(){
+        
+        List<Group> groupList = context.Groups.ToList();
+        if (groupList != null) 
+        {
+            return groupList;
+        }
+        
+        return new List<Group>();
+    }
     
     public Group AddMembers(Guid groupId, string user)
     {
@@ -49,9 +60,37 @@ public class GroupService
             context.SaveChanges();
             return group;
         }
+         throw new ArgumentNullException("Either User or Group is null or empty");
 
+    }
+
+    public Group RemoveMembers(Guid groupId, string user)
+    {
+        Group? group = context.Groups.Find(groupId);
+        if(group != null && user != null)
+        {
+            group.RemoveUser(user);
+            context.Groups.Update(group);
+            context.SaveChanges();
+            return group;
+        }
          throw new ArgumentNullException("Either User or Group is null or empty");
     }
+
+
+    public List<Group> RemoveGroups() 
+    {        
+       List<Group> allGroups = context.Groups.ToList();
+
+       foreach (var group in allGroups) 
+       {
+            context.Remove(group);
+       }
+
+       context.SaveChanges();
+       return allGroups;
+    }
+    
 
      //Addmembers
         // public Group AddMembers(Guid groupId, Guid userId)

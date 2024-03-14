@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 // update status?
 
 [ApiController]
-[Route("/tasks")]
+[Route("tasks")]
 public class TaskController : ControllerBase
 {
     private TaskService taskService;
@@ -21,7 +21,7 @@ public class TaskController : ControllerBase
         this.context = context;
     }
 
-    [HttpPost("/create")]
+    [HttpPost("create")]
     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
         try
@@ -45,13 +45,13 @@ public class TaskController : ControllerBase
         return Ok(deletedTask);
     }
 
-    [HttpPut("/update")]
+    [HttpPut("update")]
     public string UpdateTask()
     {
         return "Hello!";
     }
 
-    [HttpGet("/get")]
+    [HttpGet("get")]
     public string GetAllTasks()
     {
         return "Hello!";

@@ -3,10 +3,12 @@ namespace backend;
 public class Group
 {
     public Guid Id { get; set; }
-    public string Title { get; set; }
-    public List<string> Members;
+    public string? Title { get; set; }
+    //User list
+    public List<string>? Members { get; set; }
 
-    public List<string> Tasks = new List<string>();
+    //Task List
+    public List<string> Tasks { get; set; } = new List<string>();
 
     public Group() { }
 
@@ -23,7 +25,7 @@ public class Group
 
     public void RemoveUser(string user)
     {
-        this.Members.Remove(user);
+        this.Members.Remove(user); 
     }
 }
 

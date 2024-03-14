@@ -5,9 +5,12 @@ public class Task
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
+    
+    // påminnelse: owner ska vara User, och inte ett sträng värde!
     public string Owner { get; set; } = "";
     public int Status { get; set; }
     public DateTime CreationDate { get; set; }
+    //parent_group ska vara en Group
     public string Parent_Group { get; set; }
 
     public Task() { }

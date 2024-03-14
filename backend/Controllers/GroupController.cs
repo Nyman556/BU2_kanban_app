@@ -1,7 +1,10 @@
-// create group
-// add member
-// remove member
-// remove group
+// create group Check
+// add member Check
+// remove member Check
+// remove group Check
+// remove all groups Check
+// Get all groups Check
+// Get all users from a group - in progress
 
 namespace backend;
 
@@ -46,13 +49,13 @@ public class GroupController : ControllerBase
     {
         try
         {
-            if (dto == null)
+            if (dto.Title != null)
             {
-                return NotFound();
-            }
-
-            Group? group = groupService.CreateGroup(dto.Title);
+                Group? group = groupService.CreateGroup(dto.Title);
             return Ok(group);
+            }
+            return NotFound();
+            
         }
         catch (ArgumentNullException ex)
         {
@@ -80,33 +83,65 @@ public class GroupController : ControllerBase
         }
     }
 
-    // [HttpPost("addmember")]
-    // public IActionResult AddMember([FromQuery] Guid id, User user)
-    // {
-    //     try
-    //     {
-    //         Group? group = groupService.AddMembers(id, User);
+    [HttpGet("getgroups")]
+    public List<Group> GetAllGroup()
+    {
+        List<Group> list = groupService.GetAllGroups();
+        return list;
+    }
 
-    //         if (user == null)
-    //         {
-    //             return NotFound();
-    //         }
-
-    //         return Ok(group);
-    //     }
-    //     catch (ArgumentNullException ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    // }
-
-    /*
-        
-        
-        [HttpDelete("removemember")]
-        public IActionResult RemoveMember()
+    [HttpPost("addmember")]
+    public IActionResult AddMember([FromQuery] Guid id, string user)
+    {
+        // hämta användaren
+        // 
+        try
         {
-            
+           
+            Group? group = groupService.AddMembers(id, User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(group);
         }
-        */
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+  
+    [HttpDelete("removemember")]
+    public IActionResult RemoveMember([FromQuery] Guid id, string user) 
+    {
+        try
+        {
+            Group? group = groupService.RemoveMembers(id, user);
+
+            if (user == null)
+            {
+
+            return NotFound();
+
+            }
+
+            return Ok(group);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("deleteallgroups")]
+    public IActionResult RemoveGroups() 
+    {
+        var response = groupService.RemoveGroups();
+        return Ok(response);
+    }
+
+    
+      
 }
