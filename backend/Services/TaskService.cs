@@ -8,65 +8,78 @@ public class TaskService
     {
         this.context = context;
     }
-/*
-         public Task CreateTask(string title, string description, Guid groupId)
-        {
-            Group? group = context.Groups.Find(groupId);
-    
-            if (group != null)
-            {
-                Task task = new Task(title, description, group);
-                context.Tasks.Add(task);
-                context.SaveChanges();
-                return task;
-            }
-    
-            throw new ArgumentException("Group can't be null or empty!");
-        } */
 
-    public Task RemoveTask(Guid taskId)
+    public Task CreateTask(CreateTaskDto dto)
     {
-        Task? task = context.Tasks.Find(taskId);
+        // Group? group = context.Groups.Find(groupId);
 
-        if (task != null)
+        if (dto != null)
         {
-            context.Tasks.Remove(task);
+            Task task = new Task(dto.Title, dto.Description);
+            context.Tasks.Add(task);
             context.SaveChanges();
+            return task;
         }
 
         throw new ArgumentException("Group can't be null or empty!");
     }
 
-    public List<Task> GetAllTask()
+    public Task RemoveTask(Guid taskId)
     {
-        return new List<Task>();
+        Task? task = context.Tasks.Find(taskId);
+
+        if (task == null)
+        {
+            throw new ArgumentNullException("task not found");
+        }
+
+        context.Tasks.Remove(task);
+        context.SaveChanges();
+        return task;
     }
 
-    public Task UpdateTask(Guid TaskId, string title, string description)
+    //this
+    public List<Task> GetAllTask()
+    {
+        //fixa sen med users/groups
+        List<Task> taskList = context.Tasks.ToList();
+        return taskList;
+    }
+
+    public Task UpdateTask(Guid TaskId, CreateTaskDto dto)
     {
         Task? task = context.Tasks.Find(TaskId);
 
         if (task != null)
         {
-            task.Title = title;
-            task.Description = description;
+            if (task.Title != dto.Title && dto.Title != null)
+            {
+                task.Title = dto.Title;
+            }
+            if (task.Description != dto.Description && dto.Description != null)
+            {
+                task.Description = dto.Description;
+            }
+
             context.Update(task);
             context.SaveChanges();
+            return task;
         }
 
         throw new ArgumentException("Group or Task can't be null or empty!");
     }
 
-    public Task UpdateStatus(Guid TaskId, int status)
+    public Task UpdateStatus(Guid TaskId, UpdateTaskDto status)
     {
         //Ändra Status
         Task? task = context.Tasks.Find(TaskId);
 
         if (task != null)
         {
-            task.UpdateStatus(status);
+            task.Status = status.Value;
             context.Update(task);
             context.SaveChanges();
+            return task;
         }
 
         throw new ArgumentException("Group or Task can't be null or empty!");

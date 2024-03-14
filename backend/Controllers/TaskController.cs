@@ -2,12 +2,6 @@ namespace backend;
 
 using Microsoft.AspNetCore.Mvc;
 
-// Add task
-// remove
-// update
-// get all
-// update status?
-
 [ApiController]
 [Route("tasks")]
 public class TaskController : ControllerBase
@@ -26,34 +20,68 @@ public class TaskController : ControllerBase
     {
         try
         {
-            return Ok();
+            if (dto == null)
+            {
+                return NotFound();
+            }
+
+            Task? task = taskService.CreateTask(dto);
+            return Ok(dto);
         }
-        catch (ArgumentException)
+        catch (ArgumentNullException ex)
         {
-            return BadRequest();
+            return BadRequest(ex.Message);
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("removeTask/{id}")]
     public IActionResult DeleteTask(Guid id)
     {
-        var deletedTask = taskService.RemoveTask(id);
-        if (deletedTask == null)
+        try
+        {
+            Task? task = taskService.RemoveTask(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("update/{id}")]
+    public IActionResult UpdateTask(Guid id, [FromBody] CreateTaskDto dto)
+    {
+        Task? task = taskService.UpdateTask(id, dto);
+        if (task == null)
         {
             return NotFound();
         }
-        return Ok(deletedTask);
+
+        return Ok(task);
     }
 
-    [HttpPut("update")]
-    public string UpdateTask()
+    [HttpPut("updateStatus/{id}")]
+    public IActionResult UpdateTaskStatus(Guid id, [FromBody] UpdateTaskDto status)
     {
-        return "Hello!";
+        Task? task = taskService.UpdateStatus(id, status);
+        if (task == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(task);
     }
 
-    [HttpGet("get")]
-    public string GetAllTasks()
+    [HttpGet("getAll")]
+    public List<Task> GetAllTasks()
     {
-        return "Hello!";
+        List<Task> tasklist = taskService.GetAllTask();
+        return tasklist;
     }
 }
