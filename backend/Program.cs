@@ -28,6 +28,7 @@ public class Program
             .AddApiEndpoints();
 
         builder.Services.AddScoped<GroupService>();
+        builder.Services.AddScoped<TaskService>();
 
         builder.Services.AddControllers();
 
