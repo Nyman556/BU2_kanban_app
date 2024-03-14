@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import fullLogo from "/full_logo.svg";
 import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Button from "../Components/Button";
 
-function LoginView() {
+function LoginView({ onLogin }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [remember, setRemeber] = useState(false);
 
 	const handleLogin = async (event) => {
 		event.preventDefault();
-		console.log(email, password, remember);
+		onLogin(email, password, remember);
 	};
 
 	return (
@@ -49,17 +50,13 @@ function LoginView() {
 						/>
 						<label htmlFor="remember">Remember Me</label>
 					</div>
-					<a href="" className=" underline">
+
+					<Link to="/forgotPassword" className="underline">
 						Forgot Password?
-					</a>
+					</Link>
 				</div>
 				<div className="flex flex-col space-y-4 items-center">
-					<button
-						className="bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
-						onClick={handleLogin}
-					>
-						Login
-					</button>
+					<Button type={"accent"} content={"Login"} action={handleLogin} />
 					<Link to="/register">Register Account</Link>
 				</div>
 			</form>

@@ -39,3 +39,5 @@ npm run dev
 # Tailwind
 
 # React Router
+
+# react-cookie

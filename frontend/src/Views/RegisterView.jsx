@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import fullLogo from "/full_logo.svg";
 import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Button from "../Components/Button";
 
 function RegisterView() {
 	const [email, setEmail] = useState("");
@@ -53,12 +54,11 @@ function RegisterView() {
 					</div>
 				</div>
 				<div className="flex flex-col space-y-4 items-center">
-					<button
-						className="bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
-						onClick={handleRegister}
-					>
-						Register Account
-					</button>
+					<Button
+						type={"accent"}
+						content={"Register Account"}
+						action={handleRegister}
+					/>
 					<Link to="/">Back to login</Link>
 				</div>
 			</form>
