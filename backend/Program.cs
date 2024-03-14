@@ -30,7 +30,17 @@ public class Program
         builder.Services.AddScoped<GroupService>();
 
         builder.Services.AddControllers();
+
         var app = builder.Build();
+
+        app.UseCors(builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:5173") // Replace with your frontend URL
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials(); // Allow credentials if your frontend sends them
+        });
 
         app.UseHttpsRedirection();
         app.MapIdentityApi<User>();
