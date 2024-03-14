@@ -6,7 +6,13 @@ import { Link } from "react-router-dom";
 function RegisterView() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [remember, setRemeber] = useState(false);
+	const [confirmPassword, setConfirmPassword] = useState("");
+
+	const handleRegister = async (event) => {
+		event.preventDefault();
+		console.log(email, password, confirmPassword);
+	};
+
 	return (
 		<div className="w-screen h-screen flex flex-col space-y-16 justify-center items-center bg-primaryBg text-white">
 			<img src={fullLogo} alt="Logo" />
@@ -41,13 +47,16 @@ function RegisterView() {
 							type="password"
 							placeholder="••••••••"
 							className="bg-secondaryBg w-full focus:border-none focus:outline-none"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
+							value={confirmPassword}
+							onChange={(e) => setConfirmPassword(e.target.value)}
 						/>
 					</div>
 				</div>
 				<div className="flex flex-col space-y-4 items-center">
-					<button className="bg-accent rounded-lg p-2 px-10 min-w-36">
+					<button
+						className="bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
+						onClick={handleRegister}
+					>
 						Register Account
 					</button>
 					<Link to="/">Back to login</Link>

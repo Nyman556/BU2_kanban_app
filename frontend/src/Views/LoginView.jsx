@@ -55,7 +55,7 @@ function LoginView() {
 				</div>
 				<div className="flex flex-col space-y-4 items-center">
 					<button
-						className="bg-accent rounded-lg p-2 px-10 min-w-36"
+						className="bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
 						onClick={handleLogin}
 					>
 						Login
