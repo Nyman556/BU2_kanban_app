@@ -1,24 +1,24 @@
-## Backend
+# Backend
 
-# Setup:
+## Setup:
 
-cd backend
-dotnet restore
-dotnet build
-dotnet run
+cd backend  
+dotnet restore  
+dotnet build  
+dotnet run  
 
 ## Paket:
 
-# EntityFramework
+## EntityFramework
 
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL  
 dotnet add package Microsoft.EntityFrameworkCore.Design
 
-# IdentityCore
+## IdentityCore
 
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 
-# Migrations
+## Migrations
 
 - skapa migration:
   dotnet ef migrations add <namn>
@@ -26,16 +26,15 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 - för att uppdatera databasen
   dotnet ef database update
 
-## Frontend
+# Frontend
 
-# Setup:
+## Setup:
 
-cd frontend
-npm i
-npm run dev
+cd frontend  
+npm i  
+npm run dev  
 
 ## Paket:
 
-# Tailwind
-
-# React Router
+Tailwind  
+React Router
