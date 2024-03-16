@@ -3,15 +3,31 @@ import fullLogo from "/full_logo.svg";
 import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Button from "../Components/Button";
+import authApi from "../api/auth";
 
 function RegisterView() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [success, setSuccess] = useState(null);
+	const [error, setError] = useState(null);
 
-	const handleRegister = async (event) => {
-		event.preventDefault();
-		console.log(email, password, confirmPassword);
+	const handleRegister = async () => {
+		if (confirmPassword === password) {
+			try {
+				const data = await authApi.register(email, password);
+				console.log("Registration Successful", data);
+				setSuccess("Account Created!");
+				setError(null);
+			} catch (error) {
+				console.error("Error occurred during registration", error);
+				setError("Error occurred during registration");
+				setSuccess(null);
+			}
+		} else {
+			setError("Passwords do not match");
+			setSuccess(null);
+		}
 	};
 
 	return (
@@ -57,11 +73,25 @@ function RegisterView() {
 					<Button
 						type={"accent"}
 						content={"Register Account"}
-						action={handleRegister}
+						action={(event) => {
+							event.preventDefault();
+							handleRegister();
+						}}
 					/>
+
 					<Link to="/">Back to login</Link>
 				</div>
 			</form>
+			{success && (
+				<div>
+					<p className="text-white text-2xl">{success}</p>
+				</div>
+			)}
+			{error && (
+				<div>
+					<p className="text-white text-2xl">{error}</p>
+				</div>
+			)}
 		</div>
 	);
 }
