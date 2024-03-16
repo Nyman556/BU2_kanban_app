@@ -52,10 +52,9 @@ public class GroupController : ControllerBase
             if (dto.Title != null)
             {
                 Group? group = groupService.CreateGroup(dto.Title);
-            return Ok(group);
+                return Ok(group);
             }
             return NotFound();
-            
         }
         catch (ArgumentNullException ex)
         {
@@ -94,11 +93,10 @@ public class GroupController : ControllerBase
     public IActionResult AddMember([FromQuery] Guid id, string user)
     {
         // hämta användaren
-        // 
+        //
         try
         {
-           
-            Group? group = groupService.AddMembers(id, User);
+            Group? group = groupService.AddMembers(id, user);
 
             if (user == null)
             {
@@ -112,9 +110,9 @@ public class GroupController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-  
+
     [HttpDelete("removemember")]
-    public IActionResult RemoveMember([FromQuery] Guid id, string user) 
+    public IActionResult RemoveMember([FromQuery] Guid id, string user)
     {
         try
         {
@@ -122,9 +120,7 @@ public class GroupController : ControllerBase
 
             if (user == null)
             {
-
-            return NotFound();
-
+                return NotFound();
             }
 
             return Ok(group);
@@ -136,12 +132,9 @@ public class GroupController : ControllerBase
     }
 
     [HttpDelete("deleteallgroups")]
-    public IActionResult RemoveGroups() 
+    public IActionResult RemoveGroups()
     {
         var response = groupService.RemoveGroups();
         return Ok(response);
     }
-
-    
-      
 }
