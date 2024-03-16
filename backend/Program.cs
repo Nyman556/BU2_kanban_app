@@ -22,7 +22,11 @@ public class Program
         builder
             .Services.AddIdentityCore<User>(options =>
             {
-                // lägg till alternativ för Användaren här framöver: t.ex email confirm etc
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddApiEndpoints();
@@ -37,10 +41,10 @@ public class Program
         app.UseCors(builder =>
         {
             builder
-                .WithOrigins("http://localhost:5173") // Replace with your frontend URL
+                .WithOrigins("http://localhost:5173")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .AllowCredentials(); // Allow credentials if your frontend sends them
+                .AllowCredentials();
         });
 
         app.UseHttpsRedirection();
