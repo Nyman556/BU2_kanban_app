@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import fullLogo from "/full_logo.svg";
 import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -9,9 +9,22 @@ function LoginView({ onLogin }) {
 	const [password, setPassword] = useState("");
 	const [remember, setRemeber] = useState(false);
 
+	useEffect(() => {
+		const storedEmail = localStorage.getItem("savedEmail");
+		if (storedEmail) {
+			setEmail(storedEmail);
+			setRemeber(true);
+		}
+	});
+
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		onLogin(email, password, remember);
+		if (remember) {
+			localStorage.setItem("savedEmail", email);
+		} else {
+			localStorage.removeItem("savedEmail");
+		}
 	};
 
 	return (

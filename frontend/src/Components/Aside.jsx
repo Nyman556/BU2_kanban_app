@@ -53,7 +53,7 @@ function Aside({ onLogout }) {
 					icon={5}
 					content="Logout"
 					path="none"
-					action={() => onLogout}
+					action={onLogout}
 					dropdown={false}
 				/>
 			</div>
