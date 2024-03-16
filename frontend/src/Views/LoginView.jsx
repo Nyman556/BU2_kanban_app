@@ -15,7 +15,7 @@ function LoginView({ onLogin }) {
 			setEmail(storedEmail);
 			setRemeber(true);
 		}
-	});
+	}, []);
 
 	const handleLogin = async (event) => {
 		event.preventDefault();
