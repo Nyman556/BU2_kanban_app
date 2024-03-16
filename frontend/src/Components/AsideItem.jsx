@@ -1,24 +1,12 @@
-import React, { Children } from "react";
+import React from "react";
 import {
-	FiHome,
-	FiUsers,
-	FiChevronDown,
-	FiChevronUp,
-	FiSettings,
-	FiLogOut,
-} from "react-icons/fi";
-import { Link } from "react-router-dom";
-const iconClasses = "text-accent text-2xl";
-const stylingClasses =
-	"w-full flex p-4 text-lg justify-center items-center space-x-2 hover:bg-tertiaryBg";
-const IconArray = [
-	FiHome,
-	FiUsers,
-	FiChevronDown,
-	FiChevronUp,
-	FiSettings,
-	FiLogOut,
-];
+	IconArray,
+	AsideIconClasses,
+	AsideStylingClasses,
+} from "../Constants/generalConsts";
+import AsideItem_Link from "./AsideItem_Link";
+import AsideItem_Dropdown from "./AsideItem_Dropdown";
+import AsideItem_Button from "./AsideItem_Button";
 
 function AsideItem({
 	type,
@@ -32,36 +20,35 @@ function AsideItem({
 	const IconComponent = IconArray[icon];
 	if (type == "Link") {
 		return (
-			<Link to={path} className={stylingClasses}>
-				<IconComponent className={iconClasses} />
-				<p>{content}</p>
-			</Link>
+			<AsideItem_Link
+				path={path}
+				stylingClasses={AsideStylingClasses}
+				IconComponent={IconComponent}
+				iconClasses={AsideIconClasses}
+				content={content}
+			/>
 		);
 	}
 	if (dropdown == true) {
 		return (
-			<button
-				className={stylingClasses}
-				onClick={() => {
-					action();
-				}}
-			>
-				<IconComponent className={iconClasses} />
-				<p>{content}</p>
-				{dropdownState ? <FiChevronUp /> : <FiChevronDown />}
-			</button>
+			<AsideItem_Dropdown
+				stylingClasses={AsideStylingClasses}
+				action={action}
+				IconComponent={IconComponent}
+				iconClasses={AsideIconClasses}
+				content={content}
+				dropdownState={dropdownState}
+			/>
 		);
 	} else {
 		return (
-			<button
-				className={stylingClasses}
-				onClick={() => {
-					action();
-				}}
-			>
-				<IconComponent className={iconClasses} />
-				<p>{content}</p>
-			</button>
+			<AsideItem_Button
+				stylingClasses={AsideStylingClasses}
+				action={action}
+				IconComponent={IconComponent}
+				iconClasses={AsideIconClasses}
+				content={content}
+			/>
 		);
 	}
 }
