@@ -16,16 +16,6 @@ function App() {
 		}
 	}, [cookies.AccessToken]);
 
-	const handleLogin = async (email, password, remember) => {
-		try {
-			const data = await authApi.login(email, password);
-			console.log("Login Successful", data);
-			setCookie("AccessToken", data.token, { path: "/", sameSite: "strict" });
-		} catch (error) {
-			console.error("Error:", error);
-		}
-	};
-
 	const handleLogout = () => {
 		removeCookie("AccessToken");
 		setUser(null);

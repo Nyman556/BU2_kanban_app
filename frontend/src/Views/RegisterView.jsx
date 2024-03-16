@@ -4,6 +4,7 @@ import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Button from "../Components/Button";
 import authApi from "../api/auth";
+import OutcomeMessage from "../Components/OutcomeMessage";
 
 function RegisterView() {
 	const [email, setEmail] = useState("");
@@ -82,16 +83,8 @@ function RegisterView() {
 					<Link to="/">Back to login</Link>
 				</div>
 			</form>
-			{success && (
-				<div>
-					<p className="text-white text-2xl">{success}</p>
-				</div>
-			)}
-			{error && (
-				<div>
-					<p className="text-white text-2xl">{error}</p>
-				</div>
-			)}
+			{success && <OutcomeMessage outcome="success" content={success} />}
+			{error && <OutcomeMessage outcome="error" content={error} />}
 		</div>
 	);
 }

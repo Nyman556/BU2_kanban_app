@@ -3,11 +3,16 @@ import fullLogo from "/full_logo.svg";
 import { FiKey, FiMail } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Button from "../Components/Button";
+import OutcomeMessage from "../Components/OutcomeMessage";
+import authApi from "../api/auth"; // Import authApi
+import { useCookies } from "react-cookie";
 
-function LoginView({ onLogin }) {
+function LoginView() {
+	const [cookies, setCookie, removeCookie] = useCookies(["AccessToken"]);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [remember, setRemeber] = useState(false);
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const storedEmail = localStorage.getItem("savedEmail");
@@ -17,13 +22,17 @@ function LoginView({ onLogin }) {
 		}
 	}, []);
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
-		onLogin(email, password, remember);
-		if (remember) {
-			localStorage.setItem("savedEmail", email);
-		} else {
-			localStorage.removeItem("savedEmail");
+	const handleLogin = async () => {
+		try {
+			const data = await authApi.login(email, password);
+			setCookie("AccessToken", data.token, { path: "/", sameSite: "strict" });
+			if (remember) {
+				localStorage.setItem("savedEmail", email);
+			} else {
+				localStorage.removeItem("savedEmail");
+			}
+		} catch (error) {
+			setError(error.message);
 		}
 	};
 
@@ -69,10 +78,18 @@ function LoginView({ onLogin }) {
 					</Link>
 				</div>
 				<div className="flex flex-col space-y-4 items-center">
-					<Button type={"accent"} content={"Login"} action={handleLogin} />
+					<Button
+						type={"accent"}
+						content={"Login"}
+						action={(event) => {
+							event.preventDefault();
+							handleLogin();
+						}}
+					/>
 					<Link to="/register">Register Account</Link>
 				</div>
 			</form>
+			{error && <OutcomeMessage outcome="error" content={error} />}
 		</div>
 	);
 }
