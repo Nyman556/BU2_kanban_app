@@ -22,13 +22,7 @@ function App() {
 	};
 
 	return (
-		<div>
-			{user ? (
-				<HomeView onLogout={handleLogout} />
-			) : (
-				<LoginView onLogin={handleLogin} />
-			)}
-		</div>
+		<div>{user ? <HomeView onLogout={handleLogout} /> : <LoginView />}</div>
 	);
 }
 
