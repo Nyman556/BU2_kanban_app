@@ -4,11 +4,9 @@ namespace backend;
 
 public class User : IdentityUser
 {
-    public DateTime CreationDate { get; set; }
+    public List<Group> Groups { get; set; }
+    public DateTime CreationDate { get; set; } =
+        DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
 
-    public User()
-    {
-        this.CreationDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-    }
-    
+    public User() { }
 }

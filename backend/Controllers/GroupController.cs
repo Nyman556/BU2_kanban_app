@@ -11,33 +11,34 @@ namespace backend;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
+public class GroupDto
+{
+    public Guid Id { get; set; }
+    public string? Title { get; set; }
+
+    public GroupDto(string title)
+    {
+        this.Title = title;
+    }
+}
+
+public class MemberDto
+{
+    public Guid Id { get; set; }
+    public string UserEmail { get; set; }
+
+    public MemberDto(Guid id, string _email)
+    {
+        this.Id = id;
+        this.UserEmail = _email;
+    }
+}
+
 [ApiController]
 [Route("group")]
 public class GroupController : ControllerBase
 {
     private GroupService groupService;
-
-    public class GroupDto
-    {
-        public Guid Id { get; set; }
-        public string? Title { get; set; }
-
-        public GroupDto(string title)
-        {
-            this.Title = title;
-        }
-    }
-
-    public class MemberDto
-    {
-        public Guid Id { get; set; }
-        public string? User { get; set; }
-
-        public MemberDto(string user)
-        {
-            this.User = user;
-        }
-    }
 
     public GroupController(GroupService groupService)
     {
@@ -90,15 +91,13 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost("addmember")]
-    public IActionResult AddMember([FromQuery] Guid id, string user)
+    public IActionResult AddMember([FromBody] MemberDto dto)
     {
-        // hämta användaren
-        //
         try
         {
-            Group? group = groupService.AddMembers(id, user);
+            Group? group = groupService.AddMembers(dto);
 
-            if (user == null)
+            if (dto == null)
             {
                 return NotFound();
             }
@@ -112,7 +111,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpDelete("removemember")]
-    public IActionResult RemoveMember([FromQuery] Guid id, string user)
+    public IActionResult RemoveMember([FromQuery] Guid id, User user)
     {
         try
         {

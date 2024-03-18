@@ -6,6 +6,7 @@ namespace backend;
 
 public class Program
 {
+    //fixa policys
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);

@@ -4,28 +4,29 @@ public class Group
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }
+
     //User list
-    public List<string>? Members { get; set; }
+    public List<User>? Members { get; set; } = new List<User>();
 
     //Task List
-    public List<string> Tasks { get; set; } = new List<string>();
+    public List<Task> Tasks { get; set; } = new List<Task>();
 
     public Group() { }
 
-    public Group(string title, List<string> userList)
+    public Group(string title)
     {
         this.Title = title;
-        this.Members = userList;
     }
 
-    public void addUser(string user)
+    public void addUser(User user)
     {
-        this.Members.Add(user);
+        if (Members != null)
+            this.Members.Add(user);
     }
 
-    public void RemoveUser(string user)
+    public void RemoveUser(User user)
     {
-        this.Members.Remove(user); 
+        if (Members != null)
+            this.Members.Remove(user);
     }
 }
-

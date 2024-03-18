@@ -1,6 +1,35 @@
 namespace backend;
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+public class CreateTaskDto
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+
+    public Guid Parent_Group { get; set; }
+
+    public CreateTaskDto(string title, string description, Guid group)
+    {
+        this.Title = title;
+        this.Description = description;
+        this.Parent_Group = group;
+    }
+}
+
+public class UpdateTaskDto
+{
+    public int Value { get; set; }
+
+    public UpdateTaskDto() { }
+
+    public UpdateTaskDto(int value)
+    {
+        this.Value = value;
+    }
+}
 
 [ApiController]
 [Route("tasks")]
@@ -16,16 +45,23 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost("create")]
+    [Authorize("create-Task")]
     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
+        var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         try
         {
             if (dto == null)
             {
                 return NotFound();
             }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            Task? task = taskService.CreateTask(dto);
+            Task? task = taskService.CreateTask(dto, id);
             return Ok(dto);
         }
         catch (ArgumentNullException ex)

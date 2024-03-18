@@ -9,13 +9,13 @@ public class TaskService
         this.context = context;
     }
 
-    public Task CreateTask(CreateTaskDto dto)
+    public Task CreateTask(CreateTaskDto dto, string id)
     {
-        // Group? group = context.Groups.Find(groupId);
-
-        if (dto != null)
+        Group? group = context.Groups.Find(dto.Parent_Group);
+        User? user = context.Users.Find(id);
+        if (user != null && group != null)
         {
-            Task task = new Task(dto.Title, dto.Description);
+            Task task = new Task(dto.Title, dto.Description, user, group);
             context.Tasks.Add(task);
             context.SaveChanges();
             return task;

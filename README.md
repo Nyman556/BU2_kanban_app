@@ -41,3 +41,16 @@ npm run dev
 # React Router
 
 # react-cookie
+
+
+
+## Todo
+- koppla addmember med user email. 
+- lägg till policys 
+
+problem 
+
+vi får inte in email av en user för att koppla en user till en group
+
+testat med members DTo tog bort cykel i databasen men den kunde inte koppla .troligtvis för att members i sig inte är kopplad till databasen. 
+" Each parameter in the deserialization constructor on type 'backend.MemberDto' must bind to an object property or field on deserialization"
