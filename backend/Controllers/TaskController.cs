@@ -18,6 +18,25 @@ public class CreateTaskDto
         this.Parent_Group = group;
     }
 }
+public class TaskDto
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public DateTime CreationDate { get; set; }
+    public GroupDto Parent_Group { get; set; }
+     public UserDto Owner { get; set; }
+    public int Status { get; set; }
+
+  public TaskDto(Task task)
+    {
+        this.Title = task.Title;
+        this.Description = task.Description;
+        this.Owner = new UserDto(task.Owner);
+        this.Parent_Group = new GroupDto(task.Parent_Group);
+        this.Status = task.Status;
+        this.CreationDate = task.CreationDate;
+    }
+}
 
 public class UpdateTaskDto
 {

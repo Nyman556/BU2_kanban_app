@@ -10,28 +10,66 @@ namespace backend;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
-public class GroupDto
+public class CreateGroupDto
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }
 
-    public GroupDto(string title)
+    public CreateGroupDto(string title)
     {
         this.Title = title;
     }
 }
 
+public class GroupDto
+{
+   public Guid Id { get; set; }
+    public string? Title { get; set; }
+
+    // User list
+    public List<UserDto>? Members { get; set; }
+
+    // Task List
+    public List<TaskDto>? Tasks { get; set; } 
+
+    public GroupDto(Group group) 
+    {
+        this.Id = group.Id;
+        this.Title = group.Title;
+        this.Members = group.Members.Select(user => new UserDto(user)).ToList();
+        this.Tasks = group.Tasks.Select(task => new TaskDto(task)).ToList();
+    }
+   
+
+} 
+public class UserDto
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+
+    public UserDto() { }
+
+    public UserDto(User user)
+    {
+        this.Name = user.UserName; // Assuming UserName property exists in your User class
+        this.Email = user.Email;
+    }
+}
+
 public class MemberDto
 {
-    public Guid Id { get; set; }
+    public Guid groupId { get; set; }
     public string UserEmail { get; set; }
 
     public MemberDto() { }
 
     public MemberDto(Guid id, string _email)
     {
-        this.Id = id;
+        this.groupId = id;
         this.UserEmail = _email;
     }
 }
@@ -48,14 +86,16 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost("creategroup")]
-    public IActionResult CreateGroup([FromBody] GroupDto dto)
+    public IActionResult CreateGroup([FromBody] CreateGroupDto dto)
     {
         try
         {
             if (dto.Title != null)
             {
                 Group? group = groupService.CreateGroup(dto.Title);
-                return Ok(group);
+
+                GroupDto? groupRespons = new GroupDto(group);
+                return Ok(groupRespons);
             }
             return NotFound();
         }
@@ -86,25 +126,33 @@ public class GroupController : ControllerBase
     }
 
     [HttpGet("getgroups")]
-    public List<Group> GetAllGroup()
+    public List<GroupDto> GetAllGroup()
     {
         List<Group> list = groupService.GetAllGroups();
-        return list;
+        var dtoList = list.Select(group => new GroupDto(group)).ToList();
+        return dtoList;
     }
 
     [HttpPost("addmember")]
+    //  [Authorize("add-members")]
     public IActionResult AddMember([FromBody] MemberDto dto)
     {
         try
-        {
-            Group? group = groupService.AddMembers(dto);
-
-            if (dto == null)
+        {   if (dto == null)
             {
                 return NotFound();
             }
 
-            return Ok(group);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+         
+
+            Group? group = groupService.AddMembers(userId, dto);
+
+            GroupDto groupRespons = new GroupDto(group);
+            
+
+            return Ok(groupRespons);
         }
         catch (ArgumentNullException ex)
         {
@@ -116,13 +164,13 @@ public class GroupController : ControllerBase
     public IActionResult RemoveMember([FromQuery] Guid id, User user)
     {
         try
-        {
-            Group? group = groupService.RemoveMembers(id, user);
-
+        {   
             if (user == null)
             {
                 return NotFound();
             }
+
+            Group? group = groupService.RemoveMembers(id, user);
 
             return Ok(group);
         }

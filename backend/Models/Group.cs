@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization; 
+
+
 namespace backend;
 
 public class Group

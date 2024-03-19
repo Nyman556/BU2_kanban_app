@@ -1,8 +1,12 @@
 namespace backend;
 
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 public class GroupService
 {
-    //Tar int title och user
+   
     private ApplicationDbContext context;
 
     public GroupService(ApplicationDbContext context)
@@ -39,7 +43,10 @@ public class GroupService
 
     public List<Group> GetAllGroups()
     {
-        List<Group> groupList = context.Groups.ToList();
+        List<Group> groupList = context
+            .Groups.Include(g => g.Members)
+            .Include(g => g.Tasks)
+            .ToList();
         if (groupList != null)
         {
             return groupList;
@@ -48,14 +55,21 @@ public class GroupService
         return new List<Group>();
     }
 
-    public Group AddMembers(MemberDto dto)
+    public Group AddMembers(string userId, MemberDto dto)
     {
-        Group? group = context.Groups.Find(dto.Id);
+        User? Owner = context.Users.Find(userId);
+        Group? group = context.Groups.Find(dto.groupId);
         User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
+        Console.WriteLine(user.Id);
+        Console.WriteLine(user.UserName);
+        Console.WriteLine(user.Email);
+
+        Console.WriteLine(group.Title);
+        Console.WriteLine("1");
         if (group != null && user != null)
         {
+            group.Members.Add(user);
             context.Groups.Update(group);
-            context.Users.Update(user);
             context.SaveChanges();
             return group;
         }
@@ -87,41 +101,4 @@ public class GroupService
         context.SaveChanges();
         return allGroups;
     }
-
-    //Addmembers
-    // public Group AddMembers(Guid groupId, Guid userId)
-    // {
-    // User? user = context.Users.Find(userId);
-    // Group? group = context.Groups.Find(groupId);
-
-    // if (group != null && user != null)
-    // {
-
-
-    //         group.addUser(user);
-    //         context.Groups.Update(group);
-    //         context.SaveChanges();
-    //         return group;
-    //    }
-
-    //     throw new ArgumentException("Either User or Group is null or empty");
-    // }
-
-    //removeMembers
-    // public Group RemoveMembers(Guid groupId, Guid userId)
-    // {
-    //     User? user = context.Users.Find(userId);
-    //     Group? group = context.Groups.Find(groupId);
-    //     if (group != null && user != null)
-    //     {
-    //         group.RemoveUser(user);
-    //         context.Groups.Update(group);
-    //         context.SaveChanges();
-    //         return group;
-    //     }
-
-    //     throw new ArgumentException("Either User or Group is null or empty");
-    // }
-
-    //remove group
 }
