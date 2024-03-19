@@ -27,6 +27,8 @@ public class MemberDto
     public Guid Id { get; set; }
     public string UserEmail { get; set; }
 
+    public MemberDto() { }
+
     public MemberDto(Guid id, string _email)
     {
         this.Id = id;

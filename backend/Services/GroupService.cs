@@ -54,8 +54,8 @@ public class GroupService
         User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
         if (group != null && user != null)
         {
-            group.addUser(user);
             context.Groups.Update(group);
+            context.Users.Update(user);
             context.SaveChanges();
             return group;
         }
