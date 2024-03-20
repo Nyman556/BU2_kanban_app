@@ -10,6 +10,8 @@ public class CreateTaskDto
     public string Description { get; set; }
 
     public Guid Parent_Group { get; set; }
+    
+    public CreateTaskDto(){}
 
     public CreateTaskDto(string title, string description, Guid group)
     {
@@ -26,6 +28,7 @@ public class TaskDto
     public GroupDto Parent_Group { get; set; }
      public UserDto Owner { get; set; }
     public int Status { get; set; }
+    public TaskDto(){}
 
   public TaskDto(Task task)
     {
@@ -48,6 +51,7 @@ public class UpdateTaskDto
     {
         this.Value = value;
     }
+    
 }
 
 [ApiController]
@@ -64,29 +68,31 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost("create")]
-    [Authorize("create-Task")]
-    public IActionResult CreateTask([FromBody] CreateTaskDto dto)
+    //[Authorize("create-Task")]
+     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
-        var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Ok("you got the dto right! ");
+                // var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        // Console.WriteLine("test id " + id);
+        // try
+        // {
+        //     if (dto == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //     // if (id == null)
+        //     // {
+        //     //     return NotFound();
+        //     // }
 
-        try
-        {
-            if (dto == null)
-            {
-                return NotFound();
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Task? task = taskService.CreateTask(dto, id);
-            return Ok(dto);
-        }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        //     Task? task = taskService.CreateTask(dto, id);
+        //     TaskDto? taskResponse = new TaskDto(task);
+        //     return Ok(taskResponse);
+        // }
+        // catch (ArgumentNullException ex)
+        // {
+        //     return BadRequest(ex.Message);
+        // }
     }
 
     [HttpDelete("removeTask/{id}")]

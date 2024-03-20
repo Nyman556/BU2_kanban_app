@@ -76,18 +76,33 @@ public class GroupService
         throw new ArgumentNullException("Either User or Group is null or empty");
     }
 
-    public Group RemoveMembers(Guid groupId, User user)
+  public Group RemoveMembers(string userId, MemberDto dto)
     {
-        Group? group = context.Groups.Find(groupId);
+        User? Owner = context.Users.Find(userId); //what is this?
+        Group? group = context.Groups.Find(dto.groupId);
+        User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
         if (group != null && user != null)
         {
-            group.RemoveUser(user);
+            group.Members.Remove(user);
             context.Groups.Update(group);
             context.SaveChanges();
             return group;
         }
         throw new ArgumentNullException("Either User or Group is null or empty");
     }
+
+    // public Group RemoveMembers(Guid groupId, User user)
+    // {
+    //     Group? group = context.Groups.Find(groupId);
+    //     if (group != null && user != null)
+    //     {
+    //         group.RemoveUser(user);
+    //         context.Groups.Update(group);
+    //         context.SaveChanges();
+    //         return group;
+    //     }
+    //     throw new ArgumentNullException("Either User or Group is null or empty");
+    // }
 
     public List<Group> RemoveGroups()
     {
