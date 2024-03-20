@@ -11,11 +11,12 @@ public class TaskService
 
     public Task CreateTask(CreateTaskDto dto, string id)
     {
-        Group? group = context.Groups.Find(dto.Parent_Group);
+        // Group? group = context.Groups.Find(dto.Parent_Group);
+        Guid groupId = dto.Parent_Group;
         User? user = context.Users.Find(id);
-        if (user != null && group != null)
+        if (user != null)
         {
-            Task task = new Task(dto.Title, dto.Description, user, group);
+            Task task = new Task(dto.Title, dto.Description, user, groupId);
             context.Tasks.Add(task);
             context.SaveChanges();
             return task;

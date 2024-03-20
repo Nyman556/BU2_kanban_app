@@ -11,6 +11,8 @@ public class CreateTaskDto
 
     public Guid Parent_Group { get; set; }
 
+    public CreateTaskDto() { }
+
     public CreateTaskDto(string title, string description, Guid group)
     {
         this.Title = title;
@@ -18,21 +20,24 @@ public class CreateTaskDto
         this.Parent_Group = group;
     }
 }
+
 public class TaskDto
 {
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime CreationDate { get; set; }
-    public GroupDto Parent_Group { get; set; }
-     public UserDto Owner { get; set; }
+    public Guid Parent_Group { get; set; }
+    public UserDto Owner { get; set; }
     public int Status { get; set; }
 
-  public TaskDto(Task task)
+    public TaskDto() { }
+
+    public TaskDto(Task task)
     {
         this.Title = task.Title;
         this.Description = task.Description;
         this.Owner = new UserDto(task.Owner);
-        this.Parent_Group = new GroupDto(task.Parent_Group);
+        this.Parent_Group = task.Parent_Group;
         this.Status = task.Status;
         this.CreationDate = task.CreationDate;
     }
@@ -64,24 +69,25 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost("create")]
-    [Authorize("create-Task")]
+    //[Authorize("create-Task")]
     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
         var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+        Console.WriteLine("test id " + id);
         try
         {
             if (dto == null)
             {
                 return NotFound();
             }
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // if (id == null)
+            // {
+            //     return NotFound();
+            // }
 
             Task? task = taskService.CreateTask(dto, id);
-            return Ok(dto);
+            TaskDto? taskResponse = new TaskDto(task);
+            return Ok(taskResponse);
         }
         catch (ArgumentNullException ex)
         {

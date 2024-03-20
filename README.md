@@ -45,7 +45,9 @@ npm run dev
 
 
 ## Todo
-- koppla addmember med user email. 
+- snygga upp koden / felhantering
+- removeMembers
+- krångel taskDto 
 - lägg till policys 
 
 problem 

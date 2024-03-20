@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 public class GroupService
 {
-   
     private ApplicationDbContext context;
 
     public GroupService(ApplicationDbContext context)
@@ -60,12 +59,7 @@ public class GroupService
         User? Owner = context.Users.Find(userId);
         Group? group = context.Groups.Find(dto.groupId);
         User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
-        Console.WriteLine(user.Id);
-        Console.WriteLine(user.UserName);
-        Console.WriteLine(user.Email);
 
-        Console.WriteLine(group.Title);
-        Console.WriteLine("1");
         if (group != null && user != null)
         {
             group.Members.Add(user);
