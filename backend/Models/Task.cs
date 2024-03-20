@@ -10,11 +10,11 @@ public class Task
     public int Status { get; set; }
     public DateTime CreationDate { get; set; }
 
-    public Group Parent_Group { get; set; }
+    public Guid Parent_Group { get; set; }
 
     public Task() { }
 
-    public Task(string title, string description, User owner, Group group)
+    public Task(string title, string description, User owner, Guid group)
     {
         this.Title = title;
         this.Description = description;

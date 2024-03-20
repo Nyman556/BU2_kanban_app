@@ -8,10 +8,10 @@
 
 namespace backend;
 
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 public class CreateGroupDto
@@ -29,7 +29,7 @@ public class CreateGroupDto
 
 public class GroupDto
 {
-   public Guid Id { get; set; }
+    public Guid Id { get; set; }
     public string? Title { get; set; }
 
  
@@ -38,16 +38,15 @@ public class GroupDto
    public List<TaskDto>? Tasks { get; set; }
     public GroupDto(){}
 
-    public GroupDto(Group group) 
+    public GroupDto(Group group)
     {
         this.Id = group.Id;
         this.Title = group.Title;
         this.Members = group.Members.Select(user => new UserDto(user)).ToList();
         this.Tasks = group.Tasks.Select(task => new TaskDto(task)).ToList();
     }
-   
+}
 
-} 
 public class UserDto
 {
     public string Name { get; set; }
@@ -142,21 +141,19 @@ public class GroupController : ControllerBase
     public IActionResult AddMember([FromBody] MemberDto dto)
     {
         try
-        {   if (dto == null)
+        {
+            if (dto == null)
             {
                 return NotFound();
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-         
-
             Group? group = groupService.AddMembers(userId, dto);
 
-            GroupDto groupRespons = new GroupDto(group);
-            
+            GroupDto groupResponse = new GroupDto(group);
 
-            return Ok(groupRespons);
+            return Ok(groupResponse);
         }
         catch (ArgumentNullException ex)
         {
