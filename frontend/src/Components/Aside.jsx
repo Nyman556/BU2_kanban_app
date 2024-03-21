@@ -36,7 +36,7 @@ function Aside({ onLogout }) {
 								<br />
 							</button>
 							<Link
-								to="/"
+								to="/CreateGroup"
 								className="w-full flex p-4 text-lg justify-center items-center space-x-2 hover:bg-tertiaryBg"
 							>
 								<FiUsers className="text-accent text-2xl" />
