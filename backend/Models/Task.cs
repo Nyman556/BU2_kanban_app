@@ -6,25 +6,24 @@ public class Task
     public string Title { get; set; }
     public string Description { get; set; }
 
-    public User Owner { get; set; }
+    //public User Owner { get; set; }
     public int Status { get; set; }
     public DateTime CreationDate { get; set; }
 
-    public Guid Parent_Group { get; set; }
+    public Group Parent_Group { get; set; }
 
     public Task() { }
 
-    public Task(string title, string description, User owner, Guid group)
+    public Task(string title, string description, Group group)
     {
         this.Title = title;
         this.Description = description;
-        this.Owner = owner;
+        //this.Owner = owner;
         this.Parent_Group = group;
         this.Status = 0;
         this.CreationDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
     }
 
-    //this
     public void UpdateStatus(int status)
     {
         this.Status = status;

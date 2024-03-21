@@ -19,7 +19,7 @@ public class CreateGroupDto
     public Guid Id { get; set; }
     public string? Title { get; set; }
 
-    public CreateGroupDto(){}
+    public CreateGroupDto() { }
 
     public CreateGroupDto(string title)
     {
@@ -32,11 +32,11 @@ public class GroupDto
     public Guid Id { get; set; }
     public string? Title { get; set; }
 
- 
     public List<UserDto>? Members { get; set; }
 
-   public List<TaskDto>? Tasks { get; set; }
-    public GroupDto(){}
+    public List<TaskDto>? Tasks { get; set; }
+
+    public GroupDto() { }
 
     public GroupDto(Group group)
     {
@@ -44,6 +44,23 @@ public class GroupDto
         this.Title = group.Title;
         this.Members = group.Members.Select(user => new UserDto(user)).ToList();
         this.Tasks = group.Tasks.Select(task => new TaskDto(task)).ToList();
+    }
+}
+
+public class GroupDtoTask
+{
+    public Guid Id { get; set; }
+    public string? Title { get; set; }
+
+    public List<UserDto>? Members { get; set; }
+
+    public GroupDtoTask() { }
+
+    public GroupDtoTask(Group group)
+    {
+        this.Id = group.Id;
+        this.Title = group.Title;
+        this.Members = group.Members.Select(user => new UserDto(user)).ToList();
     }
 }
 
@@ -56,7 +73,7 @@ public class UserDto
 
     public UserDto(User user)
     {
-        this.Name = user.UserName; // Assuming UserName property exists in your User class
+        this.Name = user.UserName;
         this.Email = user.Email;
     }
 }
@@ -91,16 +108,19 @@ public class GroupController : ControllerBase
     {
         try
         {
-             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-             Console.WriteLine(userId);
-            if (dto.Title != null)
-            {
-                Group? group = groupService.CreateGroup(dto.Title);
+            //behöver fixa claims för att kunna hitta user
 
-                GroupDto? groupRespons = new GroupDto(group);
-                return Ok(groupRespons);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (dto.Title == null)
+            {
+                return NotFound();
             }
-            return NotFound();
+
+            Group? group = groupService.CreateGroup(dto.Title);
+
+            GroupDto? groupRespons = new GroupDto(group);
+            return Ok(groupRespons);
         }
         catch (ArgumentNullException ex)
         {
@@ -137,7 +157,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost("addmember")]
-    //  [Authorize("add-members")]
+    //[Authorize("add-members")]
     public IActionResult AddMember([FromBody] MemberDto dto)
     {
         try
@@ -161,8 +181,7 @@ public class GroupController : ControllerBase
         }
     }
 
-   
-  [HttpDelete("removemember")]
+    [HttpDelete("removemember")]
     public IActionResult RemoveMember([FromBody] MemberDto dto)
     {
         try
@@ -172,7 +191,7 @@ public class GroupController : ControllerBase
                 return NotFound();
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
- 
+
             Group? group = groupService.RemoveMembers(userId, dto);
             GroupDto groupResponse = new GroupDto(group);
             return Ok(groupResponse);
@@ -182,26 +201,6 @@ public class GroupController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
-    // [HttpDelete("removemember")]
-    // public IActionResult RemoveMember([FromQuery] Guid id, User user)
-    // {
-    //     try
-    //     {   
-    //         if (user == null)
-    //         {
-    //             return NotFound();
-    //         }
-
-    //         Group? group = groupService.RemoveMembers(id, user);
-
-    //         return Ok(group);
-    //     }
-    //     catch (ArgumentNullException ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    // }
 
     [HttpDelete("deleteallgroups")]
     public IActionResult RemoveGroups()

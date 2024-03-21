@@ -44,51 +44,57 @@ public class GroupService
     {
         List<Group> groupList = context
             .Groups.Include(g => g.Members)
-            // .Include(g => g.Tasks) 
+            // .Include(g => g.Tasks)
             .ToList();
-        if (groupList != null)
+        if (groupList == null)
         {
-            return groupList;
+            return new List<Group>();
         }
 
-        return new List<Group>();
+        return groupList;
     }
 
     public Group AddMembers(string userId, MemberDto dto)
     {
-        User? Owner = context.Users.Find(userId);
         Group? group = context.Groups.Find(dto.groupId);
         User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
 
-        if (group != null && user != null)
+        if (group == null)
         {
-            group.Members.Add(user);
-            context.Groups.Update(group);
-            context.SaveChanges();
-            return group;
+            throw new ArgumentNullException("Group is null or empty");
         }
-        throw new ArgumentNullException("Either User or Group is null or empty");
+        if (user == null)
+        {
+            throw new ArgumentNullException("User is null or empty");
+        }
+
+        group.Members.Add(user);
+        context.Groups.Update(group);
+        context.SaveChanges();
+        return group;
     }
 
-  public Group RemoveMembers(string userId, MemberDto dto)
+    public Group RemoveMembers(string userId, MemberDto dto)
     {
-        User? Owner = context.Users.Find(userId); //what is this?
-       Group? group = context.Groups
-                        .Include(g => g.Members) 
-                        .FirstOrDefault(g => g.Id == dto.groupId);
+        Group? group = context
+            .Groups.Include(g => g.Members)
+            .FirstOrDefault(g => g.Id == dto.groupId);
         User? user = context.Users.FirstOrDefault(u => u.Email == dto.UserEmail);
-        if (group == null )
+        if (group == null)
         {
-             throw new ArgumentNullException("Either User or Group is null or empty");
+            throw new ArgumentNullException("Group is null or empty");
         }
-        
+
+        if (user == null)
+        {
+            throw new ArgumentNullException("User is null or empty");
+        }
+
         group.Members.Remove(user);
         context.Groups.Update(group);
         context.SaveChanges();
         return group;
-       
     }
-
 
     public List<Group> RemoveGroups()
     {

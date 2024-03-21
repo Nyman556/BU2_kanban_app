@@ -10,8 +10,8 @@ public class CreateTaskDto
     public string Description { get; set; }
 
     public Guid Parent_Group { get; set; }
-    
-    public CreateTaskDto(){}
+
+    public CreateTaskDto() { }
 
     public CreateTaskDto(string title, string description, Guid group)
     {
@@ -23,20 +23,22 @@ public class CreateTaskDto
 
 public class TaskDto
 {
+    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime CreationDate { get; set; }
-    public Guid Parent_Group { get; set; }
-    public UserDto Owner { get; set; }
-    public int Status { get; set; }
-    public TaskDto(){}
 
-  public TaskDto(Task task)
+    public GroupDtoTask parent_group { get; set; }
+    public int Status { get; set; }
+
+    public TaskDto() { }
+
+    public TaskDto(Task task)
     {
+        this.Id = task.Id;
         this.Title = task.Title;
         this.Description = task.Description;
-        this.Owner = new UserDto(task.Owner);
-        this.Parent_Group = task.Parent_Group;
+        this.parent_group = new GroupDtoTask(task.Parent_Group);
         this.Status = task.Status;
         this.CreationDate = task.CreationDate;
     }
@@ -52,7 +54,6 @@ public class UpdateTaskDto
     {
         this.Value = value;
     }
-    
 }
 
 [ApiController]
@@ -70,30 +71,30 @@ public class TaskController : ControllerBase
 
     [HttpPost("create")]
     //[Authorize("create-Task")]
-     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
+    public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
-        return Ok("you got the dto right! ");
-                // var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        // Console.WriteLine("test id " + id);
-        // try
-        // {
-        //     if (dto == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     // if (id == null)
-        //     // {
-        //     //     return NotFound();
-        //     // }
+        try
+        {
+            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine("test id " + id);
 
-        //     Task? task = taskService.CreateTask(dto, id);
-        //     TaskDto? taskResponse = new TaskDto(task);
-        //     return Ok(taskResponse);
-        // }
-        // catch (ArgumentNullException ex)
-        // {
-        //     return BadRequest(ex.Message);
-        // }
+            if (dto == null)
+            {
+                return NotFound();
+            }
+            // if (id == null)
+            // {
+            //     return NotFound();
+            // }
+
+            Task? task = taskService.CreateTask(dto, id);
+            TaskDto? taskResponse = new TaskDto(task);
+            return Ok(taskResponse);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("removeTask/{id}")]

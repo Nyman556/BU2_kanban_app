@@ -45,14 +45,8 @@ npm run dev
 
 
 ## Todo
-- snygga upp koden / felhantering
-- removeMembers
-- krångel taskDto 
-- lägg till policys 
+- fixa dto för att skicka med parent-group till en task 
+- lägg till policys / claims
 
-problem 
 
-vi får inte in email av en user för att koppla en user till en group
 
-testat med members DTo tog bort cykel i databasen men den kunde inte koppla .troligtvis för att members i sig inte är kopplad till databasen. 
-" Each parameter in the deserialization constructor on type 'backend.MemberDto' must bind to an object property or field on deserialization"

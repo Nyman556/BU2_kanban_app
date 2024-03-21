@@ -11,18 +11,22 @@ public class TaskService
 
     public Task CreateTask(CreateTaskDto dto, string id)
     {
-        // Group? group = context.Groups.Find(dto.Parent_Group);
-        Guid groupId = dto.Parent_Group;
-        User? user = context.Users.Find(id);
-        if (user != null)
+        if (dto == null)
         {
-            Task task = new Task(dto.Title, dto.Description, user, groupId);
-            context.Tasks.Add(task);
-            context.SaveChanges();
-            return task;
+            throw new ArgumentNullException("add title, description and group id");
         }
 
-        throw new ArgumentException("Group can't be null or empty!");
+        Group? group = context.Groups.Find(dto.Parent_Group);
+        //User? user = context.Users.Find(id);
+
+        if (group == null)
+        {
+            throw new ArgumentNullException("Group can't be null or empty!");
+        }
+        Task task = new Task(dto.Title, dto.Description, group);
+        context.Tasks.Add(task);
+        context.SaveChanges();
+        return task;
     }
 
     public Task RemoveTask(Guid taskId)
@@ -39,13 +43,14 @@ public class TaskService
         return task;
     }
 
-    //this
     public List<Task> GetAllTask()
     {
         //fixa sen med users/groups
         List<Task> taskList = context.Tasks.ToList();
         return taskList;
     }
+
+    //fixa en get task by group id
 
     public Task UpdateTask(Guid TaskId, CreateTaskDto dto)
     {
