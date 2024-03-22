@@ -33,7 +33,7 @@ function Aside({ onLogout }) {
 									type="Link"
 									icon={1}
 									content={group.title}
-									path={group.id}
+									path={`/group/${group.id}`}
 								/>
 							))}
 							<AsideItem
