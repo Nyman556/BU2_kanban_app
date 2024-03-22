@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import {
-	FiHome,
-	FiUsers,
-	FiChevronDown,
-	FiChevronUp,
-	FiSettings,
-	FiLogOut,
-} from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
 import smallLogo from "/small_logo.svg";
 import AsideItem from "./AsideItem";
 import { allGroupsAtom } from "../Recoil/atoms";
@@ -35,21 +28,20 @@ function Aside({ onLogout }) {
 					{groupOpen && (
 						<div>
 							{allGroups.map((group) => (
-								<button
+								<AsideItem
 									key={group.id}
-									className="w-full flex p-4 text-lg justify-center items-center space-x-2 hover:bg-tertiaryBg"
-								>
-									{group.title}
-									<br />
-								</button>
+									type="Link"
+									icon={1}
+									content={group.title}
+									path={group.id}
+								/>
 							))}
-							<Link
-								to="/CreateGroup"
-								className="w-full flex p-4 text-lg justify-center items-center space-x-2 hover:bg-tertiaryBg"
-							>
-								<FiUsers className="text-accent text-2xl" />
-								<p>Create Group</p>
-							</Link>
+							<AsideItem
+								type="Link"
+								icon={6}
+								content="Create Group"
+								path="/CreateGroup"
+							/>
 						</div>
 					)}
 				</ul>

@@ -5,6 +5,7 @@ import {
 	FiChevronUp,
 	FiSettings,
 	FiLogOut,
+	FiUserPlus,
 } from "react-icons/fi";
 
 export const IconArray = [
@@ -14,6 +15,7 @@ export const IconArray = [
 	FiChevronUp,
 	FiSettings,
 	FiLogOut,
+	FiUserPlus,
 ];
 
 export const AsideIconClasses = "text-accent text-2xl";
