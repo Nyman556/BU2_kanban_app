@@ -25,7 +25,10 @@ function LoginView() {
 	const handleLogin = async () => {
 		try {
 			const data = await authApi.login(email, password);
-			setCookie("AccessToken", data.token, { path: "/", sameSite: "strict" });
+			setCookie("AccessToken", data.accessToken, {
+				path: "/",
+				sameSite: "strict",
+			});
 			if (remember) {
 				localStorage.setItem("savedEmail", email);
 			} else {
