@@ -1,35 +1,37 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import Aside from "../Components/Aside";
-import { useCookies } from "react-cookie";
-import { useSetRecoilState } from "recoil";
-import groupApi from "../api/group";
+import { useRecoilValue } from "recoil";
 import { allGroupsAtom } from "../Recoil/atoms";
+import textLogo from "/text_logo.svg";
+import Board from "../Components/Board";
+import Button from "../Components/Button";
 
 function GroupView() {
-	const setGroups = useSetRecoilState(allGroupsAtom);
-	const [cookies, setCookie, removeCookie] = useCookies(["AccessToken"]);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				if (cookies.AccessToken) {
-					await groupApi.getAll(setGroups, cookies.AccessToken);
-				}
-			} catch (error) {
-				console.error("Error fetching groups:", error.message);
-			}
-		};
-
-		fetchData();
-	}, [setGroups, cookies.AccessToken]);
+	const allGroups = useRecoilValue(allGroupsAtom);
 	const { groupId } = useParams();
+	const selectedGroup = allGroups.find((group) => group.id === groupId);
+
 	return (
 		<div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
 			<Aside onLogout={"none"} />
-			<div className="flex flex-col justify-center items-center w-full">
-				<h2>{groupId}</h2>
-			</div>
+			{selectedGroup && (
+				<div className="w-full p-6 space-y-16">
+					<div className="flex justify-between w-full">
+						<div className=" text-3xl font-bold flex space-x-4">
+							<h2 className=" text-gray-600">Group:</h2>
+							<h2 className="">{selectedGroup.title}</h2>
+						</div>
+						<img
+							src={textLogo}
+							className="w-60 h-fit"
+							alt="Ducktasks text logo"
+						/>
+					</div>
+					<Board group={selectedGroup} />
+					<Button type="none" content="Delete Group" action="temp" />
+				</div>
+			)}
 		</div>
 	);
 }
