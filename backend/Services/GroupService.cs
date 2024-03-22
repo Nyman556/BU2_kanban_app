@@ -44,7 +44,7 @@ public class GroupService
     {
         List<Group> groupList = context
             .Groups.Include(g => g.Members)
-            // .Include(g => g.Tasks)
+            .Include(g => g.Tasks)
             .ToList();
         if (groupList == null)
         {

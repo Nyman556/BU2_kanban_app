@@ -17,7 +17,6 @@ public class TaskService
         }
 
         Group? group = context.Groups.Find(dto.Parent_Group);
-        //User? user = context.Users.Find(id);
 
         if (group == null)
         {
@@ -45,12 +44,12 @@ public class TaskService
 
     public List<Task> GetAllTask()
     {
-        //fixa sen med users/groups
+       
         List<Task> taskList = context.Tasks.ToList();
         return taskList;
     }
 
-    //fixa en get task by group id
+    //fixa en get task by group id?
 
     public Task UpdateTask(Guid TaskId, CreateTaskDto dto)
     {

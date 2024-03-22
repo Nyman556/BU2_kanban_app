@@ -10,7 +10,16 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+         builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(
+                "login",
+                policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                }
+            ); 
+               });
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(
@@ -52,7 +61,11 @@ public class Program
         app.MapIdentityApi<User>();
         app.MapControllers();
         app.UseAuthentication();
+        
+        app.UseAuthorization();
+        app.UseHttpsRedirection();
 
+       
         app.Run();
     }
 }

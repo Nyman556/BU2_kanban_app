@@ -9,6 +9,7 @@ import App from "./App";
 import RegisterView from "./Views/RegisterView";
 import ForgotView from "./Views/ForgotView";
 import CreateGroupView from "./Views/createGroupView";
+import CreateTaskView from "./Views/createTaskView";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
   {
     path: "/CreateGroup",
     element: <CreateGroupView />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/CreateTask",
+    element: <CreateTaskView />,
     errorElement: <ErrorView />,
   },
 ]);

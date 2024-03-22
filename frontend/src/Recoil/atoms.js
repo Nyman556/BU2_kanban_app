@@ -6,6 +6,11 @@ export const allGroupsAtom = atom({
 });
 
 export const allTasksAtom = atom({
-    key: "allGroupsAtom",
-    default: []
+    key: "allTasksAtom",
+    default: [{
+        Id: "", 
+        Title: "", 
+        Members: [{id: "", Email: ""}]
+    
+    }]
 });

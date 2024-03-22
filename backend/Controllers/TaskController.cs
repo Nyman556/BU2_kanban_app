@@ -1,60 +1,10 @@
-namespace backend;
-
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-public class CreateTaskDto
-{
-    public string Title { get; set; }
-    public string Description { get; set; }
-
-    public Guid Parent_Group { get; set; }
-
-    public CreateTaskDto() { }
-
-    public CreateTaskDto(string title, string description, Guid group)
-    {
-        this.Title = title;
-        this.Description = description;
-        this.Parent_Group = group;
-    }
-}
-
-public class TaskDto
-{
-    public Guid Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public DateTime CreationDate { get; set; }
-
-    public GroupDtoTask parent_group { get; set; }
-    public int Status { get; set; }
-
-    public TaskDto() { }
-
-    public TaskDto(Task task)
-    {
-        this.Id = task.Id;
-        this.Title = task.Title;
-        this.Description = task.Description;
-        this.parent_group = new GroupDtoTask(task.Parent_Group);
-        this.Status = task.Status;
-        this.CreationDate = task.CreationDate;
-    }
-}
-
-public class UpdateTaskDto
-{
-    public int Value { get; set; }
-
-    public UpdateTaskDto() { }
-
-    public UpdateTaskDto(int value)
-    {
-        this.Value = value;
-    }
-}
+namespace backend;
 
 [ApiController]
 [Route("tasks")]
@@ -69,14 +19,15 @@ public class TaskController : ControllerBase
         this.context = context;
     }
 
+
     [HttpPost("create")]
-    //[Authorize("create-Task")]
+    [Authorize("login")]
     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
     {
         try
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine("test id " + id);
+     
 
             if (dto == null)
             {
@@ -97,7 +48,9 @@ public class TaskController : ControllerBase
         }
     }
 
+
     [HttpDelete("removeTask/{id}")]
+    [Authorize("login")]
     public IActionResult DeleteTask(Guid id)
     {
         try
@@ -117,7 +70,9 @@ public class TaskController : ControllerBase
         }
     }
 
+
     [HttpPut("update/{id}")]
+    [Authorize("login")]
     public IActionResult UpdateTask(Guid id, [FromBody] CreateTaskDto dto)
     {
         Task? task = taskService.UpdateTask(id, dto);
@@ -130,6 +85,7 @@ public class TaskController : ControllerBase
     }
 
     [HttpPut("updateStatus/{id}")]
+    [Authorize("login")]
     public IActionResult UpdateTaskStatus(Guid id, [FromBody] UpdateTaskDto status)
     {
         Task? task = taskService.UpdateStatus(id, status);
@@ -142,9 +98,10 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("getAll")]
+    [Authorize("login")]
     public List<Task> GetAllTasks()
     {
-        List<Task> tasklist = taskService.GetAllTask();
-        return tasklist;
+        List<Task> taskList = taskService.GetAllTask();
+        return taskList;
     }
 }

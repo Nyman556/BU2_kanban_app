@@ -2,67 +2,66 @@ import React, { useState } from "react";
 import Aside from "../Components/Aside";
 import { useRecoilState } from "recoil";
 import { allGroupsAtom } from "../Recoil/atoms";
+import Button from "../Components/Button";
 
 export default function CreateGroupView({ onLogout }) {
-  const [form, setForm] = useState({ Title: "", Owner: "" });
-  const [groups, setGroups] = useRecoilState(allGroupsAtom);
+  const [group, setGroup] = useState({ id: 1, Title: "" });
+  const [members, setMembers] = useState({ Id: "", Email: "" });
+  const [allGroups, setAllGroups] = useRecoilState(allGroupsAtom);
 
   const handelChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    console.log(form);
+    setGroup((prev) => ({ ...prev, [name]: value }));
+    console.log(group);
   };
-  // const handelSubmitFront = (e) => {
-
-  //   e.stopPropagation();
-  //   setGroups((prev) => [...prev, {form}]);
-  // };
-  // const handelSubmit = async () => {
-  // 	try {
-  // 		// const data = await groupApi.();
-  // 		// setCookie("AccessToken", data.token, { path: "/", sameSite: "strict" });
-  // 		// if (remember) {
-  // 		// 	localStorage.setItem("savedEmail", email);
-  // 		// } else {
-  // 		// 	localStorage.removeItem("savedEmail");
-  // 		// }
-  // 	} catch (error) {
-  // 		// setError(error.message);
-  // 	}
-  // };
+  const handelSubmit = (e) => {
+    setAllGroups((prev) => [
+      ...prev,
+      { id: form.Id++, Title: form.Title, Members: [members] },
+    ]);
+    console.log(groups);
+  };
 
   return (
-    <div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
+    <div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white ">
       <Aside onLogout={onLogout} />
-      <div className=" flex flex-col justify-center items-center w-full">
-        <h2 className="text-4xl ">Create Groups like a boss!!!!</h2>
-        <form className="w-screen max-w-3xl ">
-          <div
-           className="flex flex-col">
-           
+      <div className=" m-20">
+        <div className="flex mb-10">
+          <h3 className="opacity-50">Groups  </h3>
+          <h3> : Create Groups</h3>
+          </div>
+        <h2 className="text-4xl bg-secondaryBg rounded-md p-1 text-xl mb-10">
+          Create Groups like a boss!!!!
+        </h2>
+        <form className="w-screen max-w-3xl grid grid-col-4 grid-row-4">
+          <div className="col-start-1 row-start-1 flex flex-col">
             <label className="text-xs">Title</label>
             <input
               className="bg-secondaryBg rounded-md p-1 max-w-72"
               type="text"
               placeholder="Title"
               name="Title"
-              value={form.Title}
+              value={group.Title}
               onChange={handelChange}
             />
           </div>
-  
-          <div className="flex flex-col">
-           
-            <label className="text-xs">Owner</label>
+
+          <div className="col-start-3 row-start-1  flex flex-col">
+            <label className="text-xs">Add members</label>
             <input
               className="bg-secondaryBg rounded-md p-1 max-w-72"
               type="text"
-              placeholder="Owner"
-              name="Owner"
-              value={form.Owner}
+              placeholder="Email"
+              name="Email"
+              value={members.Email}
               onChange={handelChange}
             />
           </div>
+          <Button
+            style="col-start-1 row-start-3 mt-20 w-40"
+            content={"create group"}
+            action={handelSubmit}
+          ></Button>
         </form>
       </div>
     </div>

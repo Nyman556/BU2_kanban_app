@@ -1,10 +1,10 @@
 import React from "react";
 
-function Button({ type, content, action }) {
+function Button({ type, content, action, style }) {
 	if (type == "accent") {
 		return (
 			<button
-				className="bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
+				className={`bg-accent transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36 ${style}`}
 				onClick={action}
 			>
 				{content}
@@ -13,10 +13,10 @@ function Button({ type, content, action }) {
 	} else {
 		return (
 			<button
-				className=" bg-secondaryBg transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36"
+				className={` bg-secondaryBg transition active:bg-accentDark rounded-lg p-2 min-w-36 ${style}`}
 				onClick={action}
 			>
-				content
+				{content}
 			</button>
 		);
 	}

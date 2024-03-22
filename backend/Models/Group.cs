@@ -1,6 +1,3 @@
-using System.Text.Json.Serialization; 
-
-
 namespace backend;
 
 public class Group
@@ -21,15 +18,4 @@ public class Group
         this.Title = title;
     }
 
-    public void addUser(User user)
-    {
-        if (Members != null)
-            this.Members.Add(user);
-    }
-
-    public void RemoveUser(User user)
-    {
-        if (Members != null)
-            this.Members.Remove(user);
-    }
 }
