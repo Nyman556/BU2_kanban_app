@@ -65,6 +65,22 @@ public class GroupService
         return groupList;
     }
 
+    public List<Group> GetUserGroups(string userId)
+    {
+        User user = context
+            .Users.Include(u => u.Groups)
+            .ThenInclude(g => g.Members)
+            .FirstOrDefault(u => u.Id == userId);
+
+        if (user == null)
+        {
+            throw new ArgumentNullException("User not found");
+        }
+
+        List<Group> userGroups = user.Groups.ToList();
+        return userGroups;
+    }
+
     public Group AddMembers(string userId, MemberDto dto)
     {
         Group? group = context.Groups.Find(dto.groupId);
