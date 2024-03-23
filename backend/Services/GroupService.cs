@@ -13,16 +13,27 @@ public class GroupService
         this.context = context;
     }
 
-    public Group CreateGroup(string title)
+    public Group CreateGroup(string title, string userId)
     {
         if (string.IsNullOrEmpty(title))
         {
-            throw new ArgumentNullException("Group not found");
+            throw new ArgumentNullException(nameof(title), "Group title cannot be null or empty");
         }
 
         Group newGroup = new Group(title);
+
+        User user = context.Users.FirstOrDefault(u => u.Id == userId);
+
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(userId), "User not found");
+        }
+
+        newGroup.Members.Add(user);
+
         context.Groups.Add(newGroup);
         context.SaveChanges();
+
         return newGroup;
     }
 

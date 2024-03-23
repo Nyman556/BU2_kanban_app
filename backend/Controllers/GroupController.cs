@@ -30,12 +30,11 @@ public class GroupController : ControllerBase
                 return NotFound();
             }
 
-            Group? group = groupService.CreateGroup(dto.Title);
+            Group? group = groupService.CreateGroup(dto.Title, userId);
 
             GroupDto? groupRespons = new GroupDto(group);
 
             return Ok(groupRespons);
-
         }
         catch (ArgumentNullException ex)
         {
