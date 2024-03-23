@@ -13,44 +13,44 @@ import GroupView from "./Views/GroupView";
 import CreateTaskView from "./Views/createTaskView";
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <App />,
-		errorElement: <ErrorView />,
-	},
-	{
-		path: "/register",
-		element: <RegisterView />,
-		errorElement: <ErrorView />,
-	},
-	{
-		path: "/forgotPassword",
-		element: <ForgotView />,
-		errorElement: <ErrorView />,
-	},
-	{
-		path: "/CreateGroup",
-		element: <CreateGroupView />,
-		errorElement: <ErrorView />,
-	},
-	{
-		path: "/CreateTask",
-		element: <CreateTaskView />,
-		errorElement: <ErrorView />,
-	},
-	{
-		path: "/group/:groupId",
-		element: <GroupView />,
-		errorElement: <ErrorView />,
-	},
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/register",
+    element: <RegisterView />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/forgotPassword",
+    element: <ForgotView />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/CreateGroup",
+    element: <CreateGroupView />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/createTask",
+    element: <CreateTaskView />,
+    errorElement: <ErrorView />,
+  },
+  {
+    path: "/group/:groupId",
+    element: <GroupView />,
+    errorElement: <ErrorView />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
-		<CookiesProvider>
-			<RecoilRoot>
-				<RouterProvider router={router} />
-			</RecoilRoot>
-		</CookiesProvider>
-	</React.StrictMode>
+  <React.StrictMode>
+    <CookiesProvider>
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
+    </CookiesProvider>
+  </React.StrictMode>
 );
