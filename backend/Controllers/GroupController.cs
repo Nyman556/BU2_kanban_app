@@ -72,29 +72,6 @@ public class GroupController : ControllerBase
         return dtoList;
     }
 
-    [HttpGet("getusergroups")]
-    [Authorize("login")]
-    public IActionResult GetUserGroups()
-    {
-        try
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return NotFound();
-            }
-
-            List<Group> userGroups = groupService.GetUserGroups(userId);
-
-            var dtoList = userGroups.Select(group => new GroupDto(group)).ToList();
-            return Ok(dtoList);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
     [HttpPost("addmember")]
     [Authorize("login")]
     public IActionResult AddMember([FromBody] MemberDto dto)
