@@ -3,7 +3,6 @@ import "./App.css";
 import HomeView from "./Views/HomeView";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import authApi from "./api/auth";
 
 function App() {
 	const [user, setUser] = useState(null);

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Aside from "../Components/Aside";
 import { useRecoilValue } from "recoil";
 import { allGroupsAtom } from "../Recoil/atoms";
@@ -11,6 +11,7 @@ function GroupView() {
 	const allGroups = useRecoilValue(allGroupsAtom);
 	const { groupId } = useParams();
 	const selectedGroup = allGroups.find((group) => group.id === groupId);
+	const handleClick = () => {};
 
 	return (
 		<div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
@@ -29,7 +30,20 @@ function GroupView() {
 						/>
 					</div>
 					<Board group={selectedGroup} />
-					<Button type="none" content="Delete Group" action="temp" />
+					<div className=" space-x-4">
+						<Link
+							to="/CreateTask"
+							className=" bg-secondaryBg transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36 border border-accent"
+						>
+							Create task
+						</Link>
+						<Button
+							type="none"
+							content="Delete Group"
+							action={handleClick}
+							style="border border-red-500"
+						/>
+					</div>
 				</div>
 			)}
 		</div>
