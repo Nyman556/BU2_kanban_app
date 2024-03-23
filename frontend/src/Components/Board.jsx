@@ -1,7 +1,7 @@
 import React from "react";
 import { FiPlus } from "react-icons/fi";
 import Task from "./Task";
-import CategoryEmpty from "./CategoryEmpty";
+import EmptyBoardItem from "./EmptyBoardItem";
 
 function Board({ group }) {
 	const todoTasks = group.tasks.filter((task) => task.status === 0);
@@ -19,7 +19,7 @@ function Board({ group }) {
 					{todoTasks.length > 0 ? (
 						todoTasks.map((task) => <Task key={task.id} task={task} />)
 					) : (
-						<CategoryEmpty />
+						<EmptyBoardItem />
 					)}
 				</div>
 				<div className="flex flex-col">
@@ -30,7 +30,7 @@ function Board({ group }) {
 					{inProgressTasks.length > 0 ? (
 						inProgressTasks.map((task) => <Task key={task.id} task={task} />)
 					) : (
-						<CategoryEmpty />
+						<EmptyBoardItem />
 					)}
 				</div>
 				<div className="flex flex-col">
@@ -41,7 +41,7 @@ function Board({ group }) {
 					{reviewTasks.length > 0 ? (
 						reviewTasks.map((task) => <Task key={task.id} task={task} />)
 					) : (
-						<CategoryEmpty />
+						<EmptyBoardItem />
 					)}
 				</div>
 				<div className="flex flex-col">
@@ -52,7 +52,7 @@ function Board({ group }) {
 					{completeTasks.length > 0 ? (
 						completeTasks.map((task) => <Task key={task.id} task={task} />)
 					) : (
-						<CategoryEmpty />
+						<EmptyBoardItem />
 					)}
 				</div>
 			</div>
@@ -62,9 +62,13 @@ function Board({ group }) {
 					<FiPlus />
 				</div>
 				{group.members.length > 0 ? (
-					group.members.map((task) => <Task key={task.id} task={task} />)
+					group.members.map((member) => (
+						<span className="flex flex-col bg-secondaryBg rounded-lg max-w-48 p-4 mt-4 space-y-4 text-base text-center">
+							{member.name}
+						</span>
+					))
 				) : (
-					<CategoryEmpty />
+					<EmptyBoardItem />
 				)}
 			</div>
 		</div>
