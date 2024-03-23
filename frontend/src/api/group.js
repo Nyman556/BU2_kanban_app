@@ -5,7 +5,7 @@ const api = import.meta.env.VITE_BACKEND_URL;
 const groupApi = {
 	getAll: async (setGroups, accessToken) => {
 		try {
-			const response = await fetch(`${api}/group/getgroups`, {
+			const response = await fetch(`${api}/group/getusergroups`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
