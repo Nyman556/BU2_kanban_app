@@ -6,6 +6,7 @@ import Button from "./Button";
 import groupApi from "../api/group";
 import OutcomeMessage from "./OutcomeMessage";
 import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
 function Board({ group, setGroup }) {
 	const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ function Board({ group, setGroup }) {
 				);
 				setGroup((prevGroup) => ({
 					...prevGroup,
-					members: [...prevGroup.members, { name: email }],
+					members: [...prevGroup.members, { name: email, email: email }],
 				}));
 				setSuccess("Member Added!");
 				setError(null);
@@ -62,72 +63,90 @@ function Board({ group, setGroup }) {
 	const reviewTasks = group.tasks.filter((task) => task.status === 2);
 	const completeTasks = group.tasks.filter((task) => task.status === 3);
 
+	const handleClick = () => {};
+
 	return (
 		<div className="flex w-full justify-between">
-			<div className="flex space-x-4">
-				<div className="flex flex-col">
-					<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
-						<p className="text-xl">Todo</p>
-						<div className="flex items-center space-x-2">
-							<span className=" bg-white text-black px-2 rounded-full">
-								{todoTasks.length}
-							</span>
-							<FiPlus />
+			<div className="flex flex-col">
+				<div className="flex space-x-4">
+					<div className="flex flex-col">
+						<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
+							<p className="text-xl">Todo</p>
+							<div className="flex items-center space-x-2">
+								<span className=" bg-white text-black px-2 rounded-full">
+									{todoTasks.length}
+								</span>
+								<FiPlus />
+							</div>
 						</div>
+						{todoTasks.length > 0 ? (
+							todoTasks.map((task) => <Task key={task.id} task={task} />)
+						) : (
+							<EmptyBoardItem />
+						)}
 					</div>
-					{todoTasks.length > 0 ? (
-						todoTasks.map((task) => <Task key={task.id} task={task} />)
-					) : (
-						<EmptyBoardItem />
-					)}
+					<div className="flex flex-col">
+						<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
+							<p className="text-xl">In Progress</p>
+							<div className="flex items-center space-x-2">
+								<span className=" bg-white text-black px-2 rounded-full">
+									{inProgressTasks.length}
+								</span>
+								<FiPlus />
+							</div>
+						</div>
+						{inProgressTasks.length > 0 ? (
+							inProgressTasks.map((task) => <Task key={task.id} task={task} />)
+						) : (
+							<EmptyBoardItem />
+						)}
+					</div>
+					<div className="flex flex-col">
+						<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
+							<p className="text-xl">Review</p>
+							<div className="flex items-center space-x-2">
+								<span className=" bg-white text-black px-2 rounded-full">
+									{reviewTasks.length}
+								</span>
+								<FiPlus />
+							</div>
+						</div>
+						{reviewTasks.length > 0 ? (
+							reviewTasks.map((task) => <Task key={task.id} task={task} />)
+						) : (
+							<EmptyBoardItem />
+						)}
+					</div>
+					<div className="flex flex-col">
+						<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
+							<p className="text-xl">Complete</p>
+							<div className="flex items-center space-x-2">
+								<span className=" bg-white text-black px-2 rounded-full">
+									{completeTasks.length}
+								</span>
+								<FiPlus />
+							</div>
+						</div>
+						{completeTasks.length > 0 ? (
+							completeTasks.map((task) => <Task key={task.id} task={task} />)
+						) : (
+							<EmptyBoardItem />
+						)}
+					</div>
 				</div>
-				<div className="flex flex-col">
-					<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
-						<p className="text-xl">In Progress</p>
-						<div className="flex items-center space-x-2">
-							<span className=" bg-white text-black px-2 rounded-full">
-								{inProgressTasks.length}
-							</span>
-							<FiPlus />
-						</div>
-					</div>
-					{inProgressTasks.length > 0 ? (
-						inProgressTasks.map((task) => <Task key={task.id} task={task} />)
-					) : (
-						<EmptyBoardItem />
-					)}
-				</div>
-				<div className="flex flex-col">
-					<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
-						<p className="text-xl">Review</p>
-						<div className="flex items-center space-x-2">
-							<span className=" bg-white text-black px-2 rounded-full">
-								{reviewTasks.length}
-							</span>
-							<FiPlus />
-						</div>
-					</div>
-					{reviewTasks.length > 0 ? (
-						reviewTasks.map((task) => <Task key={task.id} task={task} />)
-					) : (
-						<EmptyBoardItem />
-					)}
-				</div>
-				<div className="flex flex-col">
-					<div className="w-48 border-b border-accent flex  items-center justify-between p-2">
-						<p className="text-xl">Complete</p>
-						<div className="flex items-center space-x-2">
-							<span className=" bg-white text-black px-2 rounded-full">
-								{completeTasks.length}
-							</span>
-							<FiPlus />
-						</div>
-					</div>
-					{completeTasks.length > 0 ? (
-						completeTasks.map((task) => <Task key={task.id} task={task} />)
-					) : (
-						<EmptyBoardItem />
-					)}
+				<div className=" mt-16 space-x-4">
+					<Link
+						to="/CreateTask"
+						className=" bg-secondaryBg transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36 border border-accent"
+					>
+						Create task
+					</Link>
+					<Button
+						type="none"
+						content="Delete Group"
+						action={handleClick}
+						style="border border-red-500"
+					/>
 				</div>
 			</div>
 			<div className="flex flex-col px-4">
