@@ -32,6 +32,13 @@ function GroupView() {
 		fetchData();
 	}, [setGroups, cookies.AccessToken]);
 
+	useEffect(() => {
+		if (allGroups.length > 0 && groupId) {
+			const group = allGroups.find((group) => group.id === groupId);
+			setSelectedGroup(group);
+		}
+	}, [allGroups, groupId]);
+
 	const handleClick = () => {};
 
 	return (
