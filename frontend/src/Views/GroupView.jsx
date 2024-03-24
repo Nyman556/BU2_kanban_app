@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Aside from "../Components/Aside";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -14,7 +14,9 @@ function GroupView() {
 	const setGroups = useSetRecoilState(allGroupsAtom);
 	const [cookies] = useCookies(["AccessToken"]);
 	const { groupId } = useParams();
-	const selectedGroup = allGroups.find((group) => group.id === groupId);
+	const [selectedGroup, setSelectedGroup] = useState(
+		allGroups.find((group) => group.id === groupId)
+	);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -48,7 +50,7 @@ function GroupView() {
 							alt="Ducktasks text logo"
 						/>
 					</div>
-					<Board group={selectedGroup} />
+					<Board group={selectedGroup} setGroup={setSelectedGroup} />
 					<div className=" space-x-4">
 						<Link
 							to="/CreateTask"

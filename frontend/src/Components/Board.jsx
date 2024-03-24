@@ -7,7 +7,7 @@ import groupApi from "../api/group";
 import OutcomeMessage from "./OutcomeMessage";
 import { useCookies } from "react-cookie";
 
-function Board({ group }) {
+function Board({ group, setGroup }) {
 	const [email, setEmail] = useState("");
 	const [success, setSuccess] = useState(null);
 	const [error, setError] = useState(null);
@@ -21,11 +21,14 @@ function Board({ group }) {
 					email,
 					cookies.AccessToken
 				);
+				setGroup((prevGroup) => ({
+					...prevGroup,
+					members: [...prevGroup.members, { name: email }],
+				}));
 				setSuccess("Member Added!");
 				setError(null);
 				setEmail("");
 			} catch (error) {
-				console.log(error);
 				setError(error.message);
 				setSuccess(null);
 				setEmail("");
@@ -42,20 +45,17 @@ function Board({ group }) {
 				email,
 				cookies.AccessToken
 			);
+			setGroup((prevGroup) => ({
+				...prevGroup,
+				members: prevGroup.members.filter((member) => member.email !== email),
+			}));
 			setSuccess("Member Removed!");
 			setError(null);
 		} catch (error) {
-			console.log(error);
 			setError(error.message);
 			setSuccess(null);
 		}
 	};
-
-	useEffect(() => {
-		if (success) {
-			window.location.reload();
-		}
-	}, [success]);
 
 	const todoTasks = group.tasks.filter((task) => task.status === 0);
 	const inProgressTasks = group.tasks.filter((task) => task.status === 1);
