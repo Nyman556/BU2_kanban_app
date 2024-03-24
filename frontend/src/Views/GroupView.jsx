@@ -39,8 +39,6 @@ function GroupView() {
 		}
 	}, [allGroups, groupId]);
 
-	const handleClick = () => {};
-
 	return (
 		<div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
 			<Aside onLogout={"none"} />
@@ -58,20 +56,6 @@ function GroupView() {
 						/>
 					</div>
 					<Board group={selectedGroup} setGroup={setSelectedGroup} />
-					<div className=" space-x-4">
-						<Link
-							to="/CreateTask"
-							className=" bg-secondaryBg transition active:bg-accentDark rounded-lg p-2 px-10 min-w-36 border border-accent"
-						>
-							Create task
-						</Link>
-						<Button
-							type="none"
-							content="Delete Group"
-							action={handleClick}
-							style="border border-red-500"
-						/>
-					</div>
 				</div>
 			)}
 		</div>
