@@ -62,8 +62,11 @@ function Board({ group }) {
 					<FiPlus />
 				</div>
 				{group.members.length > 0 ? (
-					group.members.map((member) => (
-						<span className="flex flex-col bg-secondaryBg rounded-lg max-w-48 p-4 mt-4 space-y-4 text-base text-center">
+					group.members.map((member, idx) => (
+						<span
+							key={idx}
+							className="flex flex-col bg-secondaryBg rounded-lg max-w-48 p-4 mt-4 space-y-4 text-base text-center"
+						>
 							{member.name}
 						</span>
 					))
