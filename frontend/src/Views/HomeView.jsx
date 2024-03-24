@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 
 function HomeView({ onLogout }) {
 	const setGroups = useSetRecoilState(allGroupsAtom);
-	const [cookies, setCookie, removeCookie] = useCookies(["AccessToken"]);
+	const [cookies] = useCookies(["AccessToken"]);
 
 	useEffect(() => {
 		const fetchData = async () => {
