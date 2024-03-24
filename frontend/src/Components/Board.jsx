@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FiPlus } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
+import { FiPlus, FiX } from "react-icons/fi";
 import Task from "./Task";
 import EmptyBoardItem from "./EmptyBoardItem";
 import Button from "./Button";
@@ -14,14 +14,35 @@ function Board({ group }) {
 	const [cookies] = useCookies(["AccessToken"]);
 
 	const handleAddMember = async () => {
+		if (email) {
+			try {
+				const data = await groupApi.addMember(
+					group.id,
+					email,
+					cookies.AccessToken
+				);
+				setSuccess("Member Added!");
+				setError(null);
+				setEmail("");
+			} catch (error) {
+				console.log(error);
+				setError(error.message);
+				setSuccess(null);
+				setEmail("");
+			}
+		} else {
+			setError("Please fill in email");
+		}
+	};
+
+	const handleRemoveMember = async (email) => {
 		try {
-			const data = await groupApi.addMember(
+			const data = await groupApi.removeMember(
 				group.id,
 				email,
 				cookies.AccessToken
 			);
-			console.log(data);
-			setSuccess("Member Added!");
+			setSuccess("Member Removed!");
 			setError(null);
 		} catch (error) {
 			console.log(error);
@@ -29,6 +50,12 @@ function Board({ group }) {
 			setSuccess(null);
 		}
 	};
+
+	useEffect(() => {
+		if (success) {
+			window.location.reload();
+		}
+	}, [success]);
 
 	const todoTasks = group.tasks.filter((task) => task.status === 0);
 	const inProgressTasks = group.tasks.filter((task) => task.status === 1);
@@ -115,16 +142,23 @@ function Board({ group }) {
 				</div>
 				{group.members.length > 0 ? (
 					group.members.map((member, idx) => (
-						<span
+						<div
 							key={idx}
-							className="flex flex-col bg-secondaryBg rounded-lg max-w-48 p-4 mt-4 space-y-4 text-base text-center"
+							className="relative bg-secondaryBg rounded-lg max-w-48 p-4 mt-4 space-y-4 text-base"
 						>
-							{member.name}
-						</span>
+							<button
+								className="absolute -top-3 -left-3 flex justify-center items-center bg-secondaryBg rounded-full p-1 border border-secondaryBg hover:border-red-500 transition-colors"
+								onClick={() => handleRemoveMember(member.email)}
+							>
+								<FiX />
+							</button>
+							<span>{member.name}</span>
+						</div>
 					))
 				) : (
 					<EmptyBoardItem />
 				)}
+
 				<div className=" my-4">
 					<p>Email:</p>
 					<div className="flex items-center space-x-4 bg-secondaryBg p-2 rounded-lg border border-primaryBg focus-within:border-accent focus-within:outline-none">

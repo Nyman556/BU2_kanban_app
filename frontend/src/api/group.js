@@ -95,7 +95,7 @@ const groupApi = {
 			}
 			if (!response.ok) {
 				throw new Error(
-					`adding memeber failed with status: ${response.status}`
+					`Adding memeber failed with status: ${response.status}`
 				);
 			}
 
@@ -108,7 +108,7 @@ const groupApi = {
 	},
 	removeMember: async (groupId, userEmail, accessToken) => {
 		try {
-			const response = await fetch(`${api}/group/removegroup/${id}`, {
+			const response = await fetch(`${api}/group/removemember`, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
