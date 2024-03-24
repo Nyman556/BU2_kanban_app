@@ -81,7 +81,7 @@ const groupApi = {
 	},
 	addMember: async (groupId, userEmail, accessToken) => {
 		try {
-			const response = await fetch(`${api}/group/removegroup/${id}`, {
+			const response = await fetch(`${api}/group/addmember`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
