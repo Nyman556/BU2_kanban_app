@@ -1,16 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Aside from "../Components/Aside";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { allGroupsAtom } from "../Recoil/atoms";
 import textLogo from "/text_logo.svg";
 import Board from "../Components/Board";
 import Button from "../Components/Button";
+import groupApi from "../api/group";
+import { useCookies } from "react-cookie";
 
 function GroupView() {
 	const allGroups = useRecoilValue(allGroupsAtom);
+	const setGroups = useSetRecoilState(allGroupsAtom);
+	const [cookies] = useCookies(["AccessToken"]);
 	const { groupId } = useParams();
 	const selectedGroup = allGroups.find((group) => group.id === groupId);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				if (cookies.AccessToken) {
+					await groupApi.getAll(setGroups, cookies.AccessToken);
+				}
+			} catch (error) {
+				console.error("Error fetching groups:", error.message);
+			}
+		};
+
+		fetchData();
+	}, [setGroups, cookies.AccessToken]);
+
 	const handleClick = () => {};
 
 	return (
