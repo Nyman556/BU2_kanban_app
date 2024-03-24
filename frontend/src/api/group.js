@@ -94,9 +94,7 @@ const groupApi = {
 				return {};
 			}
 			if (!response.ok) {
-				throw new Error(
-					`Adding memeber failed with status: ${response.status}`
-				);
+				throw new Error(`Adding member failed with status: ${response.status}`);
 			}
 
 			const responseData = await response.json();
