@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Aside from "../Components/Aside";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { allGroupsAtom } from "../Recoil/atoms";
 import textLogo from "/text_logo.svg";
 import Board from "../Components/Board";
-import Button from "../Components/Button";
 import groupApi from "../api/group";
 import { useCookies } from "react-cookie";
 
@@ -40,7 +39,7 @@ function GroupView() {
 	}, [allGroups, groupId]);
 
 	return (
-		<div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
+		<div className="w-screen min-h-screen flex space-y-4 bg-primaryBg text-white">
 			<Aside onLogout={"none"} />
 			{selectedGroup && (
 				<div className="w-full p-6 space-y-16">
