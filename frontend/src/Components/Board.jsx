@@ -7,13 +7,23 @@ import groupApi from "../api/group";
 import taskApi from "../api/task";
 import OutcomeMessage from "./OutcomeMessage";
 import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Board({ group, setGroup }) {
 	const [email, setEmail] = useState("");
 	const [success, setSuccess] = useState(null);
 	const [error, setError] = useState(null);
 	const [cookies] = useCookies(["AccessToken"]);
+
+	const navigate = useNavigate();
+	const handleDeleteGroup = async () => {
+		try {
+			const data = await groupApi.removeGroup(group.id, cookies.AccessToken);
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const handleAddMember = async () => {
 		if (email) {
@@ -209,7 +219,7 @@ function Board({ group, setGroup }) {
 					<Button
 						type="none"
 						content="Delete Group"
-						action={handleClick}
+						action={handleDeleteGroup}
 						style="border border-red-500"
 					/>
 				</div>
