@@ -1,26 +1,67 @@
 const api = import.meta.env.VITE_BACKEND_URL;
 
 const taskApi = {
-  create: async (title, description, group) => {
-    try {
-      const response = await fetch(`${api}/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, description, group }),
-      });
+	create: async (title, description, group) => {
+		try {
+			const response = await fetch(`${api}/create`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ title, description, group }),
+			});
 
-      if (!response.ok) {
-        throw new Error("Something went wrong with the creation of the task!");
-      }
+			if (!response.ok) {
+				throw new Error("Something went wrong with the creation of the task!");
+			}
 
-      return response.json();
-    } catch (error) {
-      console.error("Error during creation:", error.message);
-      throw error;
-    }
-  },
+			return response.json();
+		} catch (error) {
+			console.error("Error during creation:", error.message);
+			throw error;
+		}
+	},
+	delete: async (taskId, accessToken) => {
+		try {
+			const response = await fetch(`${api}/tasks/removeTask/${taskId}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error("Something went wrong with the deletion of the task!");
+			}
+
+			return response.json();
+		} catch (error) {
+			console.error("Error during deletion:", error.message);
+			throw error;
+		}
+	},
+	updateStatus: async (taskId, value, accessToken) => {
+		try {
+			const response = await fetch(`${api}/tasks/updateStatus/${taskId}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+				body: JSON.stringify({ value }),
+			});
+
+			if (!response.ok) {
+				throw new Error("Something went wrong updating status of task!");
+			}
+
+			return response.json();
+		} catch (error) {
+			console.error("Error during status update:", error.message);
+			throw error;
+		}
+	},
 };
 
 export default taskApi;
