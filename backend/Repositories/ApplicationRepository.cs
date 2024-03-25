@@ -8,6 +8,8 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Task> Tasks { get; set; }
     public DbSet<Group> Groups { get; set; }
 
+    public ApplicationDbContext() { }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 }
