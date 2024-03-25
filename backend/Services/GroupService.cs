@@ -4,6 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+public interface IGroupRepository
+{
+    void CreateGroup(string title, string userId);
+}
+
 public class GroupService
 {
     private ApplicationDbContext context;
