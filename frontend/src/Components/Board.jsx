@@ -4,6 +4,7 @@ import Task from "./Task";
 import EmptyBoardItem from "./EmptyBoardItem";
 import Button from "./Button";
 import groupApi from "../api/group";
+import taskApi from "../api/task";
 import OutcomeMessage from "./OutcomeMessage";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
@@ -57,6 +58,42 @@ function Board({ group, setGroup }) {
 			setSuccess(null);
 		}
 	};
+	const handleDeleteTask = async (taskId) => {
+		try {
+			const data = await taskApi.delete(taskId, cookies.AccessToken);
+			setGroup((prevGroup) => ({
+				...prevGroup,
+				tasks: prevGroup.tasks.filter((task) => task.id !== taskId),
+			}));
+			setSuccess("Task Deleted!");
+			setError(null);
+		} catch (error) {
+			setError(error.message);
+			setSuccess(null);
+		}
+	};
+
+	const handleStatusUpdate = async (taskId, value) => {
+		try {
+			const data = await taskApi.updateStatus(
+				taskId,
+				value,
+				cookies.AccessToken
+			);
+			const updatedTasks = group.tasks.map((task) =>
+				task.id === taskId ? { ...task, status: value } : task
+			);
+			setGroup((prevGroup) => ({
+				...prevGroup,
+				tasks: updatedTasks,
+			}));
+			setSuccess("Task status updated!");
+			setError(null);
+		} catch (error) {
+			setError(error.message);
+			setSuccess(null);
+		}
+	};
 
 	const todoTasks = group.tasks.filter((task) => task.status === 0);
 	const inProgressTasks = group.tasks.filter((task) => task.status === 1);
@@ -80,7 +117,14 @@ function Board({ group, setGroup }) {
 							</div>
 						</div>
 						{todoTasks.length > 0 ? (
-							todoTasks.map((task) => <Task key={task.id} task={task} />)
+							todoTasks.map((task) => (
+								<Task
+									key={task.id}
+									task={task}
+									deleteTask={handleDeleteTask}
+									updateStatus={handleStatusUpdate}
+								/>
+							))
 						) : (
 							<EmptyBoardItem />
 						)}
@@ -96,7 +140,14 @@ function Board({ group, setGroup }) {
 							</div>
 						</div>
 						{inProgressTasks.length > 0 ? (
-							inProgressTasks.map((task) => <Task key={task.id} task={task} />)
+							inProgressTasks.map((task) => (
+								<Task
+									key={task.id}
+									task={task}
+									deleteTask={handleDeleteTask}
+									updateStatus={handleStatusUpdate}
+								/>
+							))
 						) : (
 							<EmptyBoardItem />
 						)}
@@ -112,7 +163,14 @@ function Board({ group, setGroup }) {
 							</div>
 						</div>
 						{reviewTasks.length > 0 ? (
-							reviewTasks.map((task) => <Task key={task.id} task={task} />)
+							reviewTasks.map((task) => (
+								<Task
+									key={task.id}
+									task={task}
+									deleteTask={handleDeleteTask}
+									updateStatus={handleStatusUpdate}
+								/>
+							))
 						) : (
 							<EmptyBoardItem />
 						)}
@@ -128,7 +186,14 @@ function Board({ group, setGroup }) {
 							</div>
 						</div>
 						{completeTasks.length > 0 ? (
-							completeTasks.map((task) => <Task key={task.id} task={task} />)
+							completeTasks.map((task) => (
+								<Task
+									key={task.id}
+									task={task}
+									deleteTask={handleDeleteTask}
+									updateStatus={handleStatusUpdate}
+								/>
+							))
 						) : (
 							<EmptyBoardItem />
 						)}
