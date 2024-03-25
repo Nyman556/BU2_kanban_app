@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Aside from "../Components/Aside";
 import { useRecoilState } from "recoil";
-import { allTasksAtom } from "../Recoil/atoms";
+import { allTasksAtom, allGroupsAtom } from "../Recoil/atoms";
 import { FiAtSign } from "react-icons/fi";
 import taskApi from "../api/task";
+import { useCookies } from "react-cookie";
 
 export default function CreateTaskView({ onLogout }) {
-  const [form, setForm] = useState({ Title: "", Description: "", Owner: "" });
+  const [form, setForm] = useState({
+    Title: "",
+    Description: "",
+    Parent_Group: "",
+  });
   const [tasks, setTasks] = useRecoilState(allTasksAtom);
+  const [cookies] = useCookies(["AccessToken"]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,12 +42,13 @@ export default function CreateTaskView({ onLogout }) {
       const newTask = await taskApi.create(
         form.Title,
         form.Description,
-        form.Owner
+        form.Parent_Group,
+        cookies.AccessToken
       );
 
       setTasks([...tasks, newTask]);
 
-      setForm({ Title: "", Description: "", Owner: "" });
+      setForm({ Title: "", Description: "", Parent_Group: "" });
     } catch (error) {
       console.error("Error creating task:", error.message);
     }
@@ -49,100 +56,104 @@ export default function CreateTaskView({ onLogout }) {
 
   // Breadcrumbs måste läggas till
   return (
-    <div className="w-screen h-screen flex -space-y-[40rem] bg-primaryBg text-white">
+    <div className="w-screen h-screen flex space-y-4 bg-primaryBg text-white">
       <Aside onLogout={onLogout} />
-      <div className=" flex flex-col justify-center w-full p-16">
-        <div className="w-4/5 bg-secondaryBg rounded-md mb-10 mt-10">
-          <h2 className="text-xl p-2"> Create Tasks</h2>
-        </div>
-        <div className="w-screen">
-          <form className="flex justify-between" onSubmit={handleSubmit}>
-            {/* left side */}
-            <div className="w-[45%]">
-              <div className="max-w-[25rem]">
-                <div className="mb-8">
-                  <div className="flex flex-row justify-between">
-                    <label className="text-sm font-semibold">Title</label>
-                    <p className="text-sm text-gray-600 font-semibold">
-                      Required
-                    </p>
-                  </div>
-
-                  <div className="flex flex-row">
-                    <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
-                      <FiAtSign className="size-6 mr-4" />
+      <div className="m-20">
+        <div className=" flex flex-col justify-center p-16">
+          <div className="w-4/5 bg-secondaryBg rounded-md mb-10 mt-10">
+            <h2 className="text-xl p-2"> Create Tasks</h2>
+          </div>
+          <div className="w-screen max-w-[90rem]">
+            <form className="flex justify-between" onSubmit={handleSubmit}>
+              {/* left side */}
+              <div className="w-[45%]">
+                <div className="max-w-[25rem]">
+                  <div className="mb-8">
+                    <div className="flex flex-row justify-between">
+                      <label className="text-sm font-semibold">Title</label>
+                      <p className="text-sm text-gray-600 font-semibold">
+                        Required
+                      </p>
                     </div>
 
-                    <input
-                      className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
-                      type="text"
-                      placeholder="Title"
-                      name="Title"
-                      value={form.Title}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+                    <div className="flex flex-row">
+                      <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
+                        <FiAtSign className="size-6 mr-4" />
+                      </div>
 
-                <div className="mb-8">
-                  <div className="flex flex-row justify-between">
-                    <label className="text-sm font-semibold">Description</label>
-                    <p className="text-sm text-gray-600 font-semibold">
-                      Required
-                    </p>
-                  </div>
-
-                  <div className="flex flex-row">
-                    <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
-                      <FiAtSign className="size-6 mr-4" />
+                      <input
+                        className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
+                        type="text"
+                        placeholder="Title"
+                        name="Title"
+                        value={form.Title}
+                        onChange={handleChange}
+                      />
                     </div>
-                    <input
-                      className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
-                      type="text"
-                      placeholder="Description"
-                      name="Description"
-                      value={form.Description}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* right side */}
-            <div className="w-[75%]">
-              <div className="max-w-[25rem]">
-                <div className="mb-8">
-                  <div className="flex flex-row justify-between">
-                    <label className="text-sm font-semibold">Owner</label>
-                    <p className="text-sm text-gray-600 font-semibold">
-                      Optional
-                    </p>
                   </div>
 
-                  <div className="flex flex-row">
-                    <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
-                      <FiAtSign className="size-6 mr-4" />
+                  <div className="mb-8">
+                    <div className="flex flex-row justify-between">
+                      <label className="text-sm font-semibold">
+                        Description
+                      </label>
+                      <p className="text-sm text-gray-600 font-semibold">
+                        Required
+                      </p>
                     </div>
-                    <input
-                      className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
-                      type="text"
-                      placeholder="Owner"
-                      name="Owner"
-                      value={form.Owner}
-                      onChange={handleChange}
-                    />
+
+                    <div className="flex flex-row">
+                      <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
+                        <FiAtSign className="size-6 mr-4" />
+                      </div>
+                      <input
+                        className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
+                        type="text"
+                        placeholder="Description"
+                        name="Description"
+                        value={form.Description}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <button
-              type="submit"
-              className="absolute top-[30rem] bg-secondaryBg hover:bg-gray-700 text-white font-bold py-2 px-6 rounded"
-            >
-              Create Task
-            </button>
-          </form>
+
+              {/* right side */}
+              <div className="w-[75%]">
+                <div className="max-w-[25rem]">
+                  <div className="mb-8">
+                    <div className="flex flex-row justify-between">
+                      <label className="text-sm font-semibold">Group</label>
+                      <p className="text-sm text-gray-600 font-semibold">
+                        Optional
+                      </p>
+                    </div>
+
+                    <div className="flex flex-row">
+                      <div className="flex items-center bg-secondaryBg rounded-l-lg text-accent p-2">
+                        <FiAtSign className="size-6 mr-4" />
+                      </div>
+                      <input
+                        className="flex bg-secondaryBg rounded-r-lg p-2 w-[25rem] placeholder-white text-lg font-semibold"
+                        type="text"
+                        placeholder="Group Id"
+                        name="Parent_Group"
+                        value={form.Parent_Group}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="absolute top-[30rem] bg-secondaryBg hover:bg-gray-700 text-white font-bold py-2 px-6 rounded"
+              >
+                Create Task
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

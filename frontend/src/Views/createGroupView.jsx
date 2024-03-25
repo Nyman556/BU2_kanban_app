@@ -27,10 +27,10 @@ export default function CreateGroupView({ onLogout }) {
       <Aside onLogout={onLogout} />
       <div className=" m-20">
         <div className="flex mb-10">
-          <h3 className="opacity-50">Groups  </h3>
+          <h3 className="opacity-50">Groups </h3>
           <h3> : Create Groups</h3>
-          </div>
-        <h2 className="text-4xl bg-secondaryBg rounded-md p-1 text-xl mb-10">
+        </div>
+        <h2 className="text-4xl bg-secondaryBg rounded-md p-1  mb-10">
           Create Groups like a boss!!!!
         </h2>
         <form className="w-screen max-w-3xl grid grid-col-4 grid-row-4">
