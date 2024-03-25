@@ -25,6 +25,9 @@ public class GroupController : ControllerBase
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if(userId == null) {
+                return NotFound();
+            }
             if (dto.Title == null)
             {
                 return NotFound();

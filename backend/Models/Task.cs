@@ -6,7 +6,7 @@ public class Task
     public string Title { get; set; }
     public string Description { get; set; }
 
-    //public User Owner { get; set; }
+
     public int Status { get; set; }
     public DateTime CreationDate { get; set; }
 

@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 
 function HomeView({ onLogout }) {
 	const allGroups = useRecoilValue(allGroupsAtom);
-	console.log(allGroups);
 	const setGroups = useSetRecoilState(allGroupsAtom);
 	const [cookies] = useCookies(["AccessToken"]);
 

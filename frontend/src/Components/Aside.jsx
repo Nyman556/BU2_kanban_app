@@ -11,7 +11,7 @@ function Aside({ onLogout }) {
   const allGroups = useRecoilValue(allGroupsAtom);
 
   return (
-    <aside className="w-1/6 h-screen bg-secondaryBg flex flex-col space-y-4 pt-4">
+    <aside className="w-1/6 h-screen bg-secondaryBg flex flex-col space-y-4 pt-4 relative">
       <div className="w-full h-full flex flex-col items-center">
         <img src={smallLogo} className=" w-24" />
         <ul className="w-full flex flex-col">
