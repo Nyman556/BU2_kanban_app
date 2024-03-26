@@ -38,7 +38,7 @@ export default function CreateGroupView({ onLogout }) {
   return (
     <div className="w-screen min-h-screen flex space-y-4 bg-primaryBg text-white">
       <Aside onLogout={onLogout} />
-      <div className=" m-20">
+      <div className="w-full m-20">
         <div className="w-full flex mb-10 justify-between space-y-16">
           <span className="opacity-50 flex">Groups  <h3> : Create Groups</h3> </span>
          
