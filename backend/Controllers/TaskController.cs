@@ -19,7 +19,6 @@ public class TaskController : ControllerBase
         this.context = context;
     }
 
-
     [HttpPost("create")]
     [Authorize("login")]
     public IActionResult CreateTask([FromBody] CreateTaskDto dto)
@@ -27,16 +26,11 @@ public class TaskController : ControllerBase
         try
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-     
 
             if (dto == null)
             {
                 return NotFound();
             }
-            // if (id == null)
-            // {
-            //     return NotFound();
-            // }
 
             Task? task = taskService.CreateTask(dto, id);
             TaskDto? taskResponse = new TaskDto(task);
@@ -47,7 +41,6 @@ public class TaskController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
 
     [HttpDelete("removeTask/{id}")]
     [Authorize("login")]
@@ -69,7 +62,6 @@ public class TaskController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
 
     [HttpPut("update/{id}")]
     [Authorize("login")]
