@@ -4,18 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-public interface IGroupRepository
-{
-    void CreateGroup(string title, string userId);
-}
-
 public class GroupService
 {
-    private ApplicationDbContext context;
+    private IGroupRepository groupRepository;
 
-    public GroupService(ApplicationDbContext context)
+    public GroupService(IGroupRepository groupRepository)
     {
-        this.context = context;
+        this.groupRepository = groupRepository;
     }
 
     public Group CreateGroup(string title, string userId)
@@ -36,6 +31,7 @@ public class GroupService
 
         newGroup.Members.Add(user);
 
+        //groupRepository.AddGroup(newGroup);
         context.Groups.Add(newGroup);
         context.SaveChanges();
 
